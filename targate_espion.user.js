@@ -72,20 +72,41 @@ var GetAllPlayers = function( callback, error) {
     xhr.send();//params); 
 };
 
+	for(var i=0;i<tTr.length/2;++i){
+		tabPts.push({
+			tr = tTr[i*2],
+			pts = tTr[i*2].payerPoints,
+			posorig = i*2
+		});
+	}
+
+	while(!fini) {
+		for(var j=0;j<tabPts.length;j++) {
+
+		}
+	}
+
+
+};
+
 // Ajout des points des joueurs
 GetAllPlayers(function(players) {
 	$("div.espionListe > fieldset.espionColonne2Liste > table > tbody > tr:not([id]) > td > div").each(function() {
 		var i;
 		for (i=0; i<players.length; ++i) {
 			if(players[i].name==$(this).text()) {
-				this.innerHTML = "|&nbsp;" + players[i].points + "&nbsp;|&nbsp;" + this.innerHTML;	
+				this.innerHTML = "|&nbsp;" + players[i].points + "&nbsp;|&nbsp;" + this.innerHTML;
+				$(this).parent("tr")[0].playerName = players[i].name;
+				$(this).parent("tr")[0].playerPoints = parseFloat(players[i].points.replace(".", ""));
 				i = players.length + 100;
 			} 
 		}
-		if(i<players.length+50) this.innerHTML = "|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;" + this.innerHTML;
+		if(i<players.length+50) this.innerHTML = "|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;" + this.innerHTML;
 	});
 });
 
+
+// Ajout de la gestion du clic.
 $(".coloraqua").add(".boutonBleu").click(function() {
 
     setTimeout(function() {
@@ -130,5 +151,5 @@ $(".coloraqua").add(".boutonBleu").click(function() {
                 rapportRsrc.append(app);
             }
         }
-    }, 750);
+    }, 1250);
 });
