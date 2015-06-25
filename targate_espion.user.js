@@ -81,13 +81,14 @@ var GetAllPlayers = function( callback, error) {
 // Ajout des points des joueurs
 GetAllPlayers(function(players) {
 	$("div.espionListe > fieldset.espionColonne2Liste > table > tbody > tr:not([id]) > td > div").each(function() {
-		for (var i=0; i<players.length; ++i) {
+		var i;
+		for (i=0; i<players.length; ++i) {
 			if(players[i].name==$(this).text()) {
 				this.innerText = players[i].points + " | " + this.innerText;	
 				i = players.length + 100;
 			} 
 		}
-		if(i!==players.length+100) this.innerText = "           ";
+		if(i!==players.length+100) this.innerText = "            | " + this.innerText;
 	});
 });
 
