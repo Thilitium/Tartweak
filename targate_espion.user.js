@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1
+// @version     1.0.0.1
 // @grant       GM_log
 // ==/UserScript==
 WP_DEBUG = true;
