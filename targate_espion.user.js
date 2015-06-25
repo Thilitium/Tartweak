@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.0.0.5
+// @version     1.0.0.6
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @grant       GM_log
 // ==/UserScript==
@@ -94,10 +94,10 @@ $(".coloraqua").add(".boutonBleu").click(function() {
         var rapportBats = $("fieldset.espionGrandrapport").first();
         $(".espionnageColonne1").prepend("<div class='tttespace' style='float:left;width=200px;' />");
         $(".tttespace").width(100);
-        $(".tttespace").height(window.scrollY - 75);
+        $(".tttespace").height(window.scrollY - 50);
         $(window).scroll(function() {
             $(".tttespace").width(100);
-            $(".tttespace").height(window.scrollY - 75);
+            $(".tttespace").height(window.scrollY - 50);
         });
 
         if (rapportRsrc.length>0 && rapportBats.length>0) {
