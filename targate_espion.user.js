@@ -125,7 +125,7 @@ GetAllPlayers(function(players) {
 	});
 });
 
-sortPlayers($("div.espionListe > fieldset.espionColonne2Liste > table");
+sortPlayers($("div.espionListe > fieldset.espionColonne2Liste > table"));
 
 
 // Ajout de la gestion du clic.
