@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.0.0.6
+// @version     1.0.1.0
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @grant       GM_log
 // ==/UserScript==
@@ -72,18 +72,38 @@ var GetAllPlayers = function( callback, error) {
     xhr.send();//params); 
 };
 
+// Tri des joueurs dans l'interface en fonction des tags "playerName" et "playerPoints" des TR.
+var sortPlayers = function(table) {
+	var tTr = $(table).find("tr");
+	var tabPts = [];
+	var fini = false;
+	var tmpTabPts;
+
 	for(var i=0;i<tTr.length/2;++i){
 		tabPts.push({
 			tr = tTr[i*2],
+			sibling = tTr[i*2+1],
 			pts = tTr[i*2].payerPoints,
 			posorig = i*2
 		});
 	}
 
 	while(!fini) {
-		for(var j=0;j<tabPts.length;j++) {
-
+		fini = true;
+		prevPts = 0;
+		for(var j=0;j<tabPts.length-1;j++) {
+			if(tabPts[j].pts > tabPts[j-1].pts) {
+				tmpTabPts = tabPts;
+				tabPts[j] = tabPts[j-1];
+				tabPts[j-1] = tmpTabPts;
+				fini = false;
+			}
 		}
+	}
+
+	for(var i=tabPts.length;i>=0;i--){
+		table.prepend(tabPts[i].sibling);
+		table.prepend(tabPts[i].tr);
 	}
 
 
@@ -97,13 +117,15 @@ GetAllPlayers(function(players) {
 			if(players[i].name==$(this).text()) {
 				this.innerHTML = "|&nbsp;" + players[i].points + "&nbsp;|&nbsp;" + this.innerHTML;
 				$(this).parent("tr")[0].playerName = players[i].name;
-				$(this).parent("tr")[0].playerPoints = parseFloat(players[i].points.replace(".", ""));
+				$(this).parent("tr")[0].playerPoints = parseFloat(((players[i].points==="")?"0":players[i].points).replace(".", ""));
 				i = players.length + 100;
 			} 
 		}
 		if(i<players.length+50) this.innerHTML = "|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;" + this.innerHTML;
 	});
 });
+
+sortPlayers($("div.espionListe > fieldset.espionColonne2Liste > table");
 
 
 // Ajout de la gestion du clic.
