@@ -84,11 +84,11 @@ GetAllPlayers(function(players) {
 		var i;
 		for (i=0; i<players.length; ++i) {
 			if(players[i].name==$(this).text()) {
-				this.innerText = players[i].points + " | " + this.innerText;	
+				this.innerHTML = "|&nbsp;" players[i].points + "&nbsp;|&nbsp;" + this.innerHTML;	
 				i = players.length + 100;
 			} 
 		}
-		if(i!==players.length+100) this.innerText = "            | " + this.innerText;
+		if(i!==players.length+100) this.innerHTML = "|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;" + this.innerHTML;
 	});
 });
 
