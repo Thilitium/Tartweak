@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.0.1.3
+// @version     1.0.1.4
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @grant       GM_log
 // ==/UserScript==
@@ -101,7 +101,7 @@ var sortPlayers = function(table) {
 		}
 	}
 
-	for(var i=tabPts.length;i>=0;i--){
+	for(var i=tabPts.length-1;i>=0;i--){
 		table.prepend(tabPts[i].sibling);
 		table.prepend(tabPts[i].tr);
 	}
