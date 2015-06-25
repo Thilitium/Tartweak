@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name        Targate Resources
+// @name        Targate-Espionnage
 // @namespace   http://userscripts.org/users/
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
@@ -82,8 +82,12 @@ var GetAllPlayers = function( callback, error) {
 GetAllPlayers(function(players) {
 	$("div.espionListe > fieldset.espionColonne2Liste > table > tbody > tr:not([id]) > td > div").each(function() {
 		for (var i=0; i<players.length; ++i) {
-			if(players[i].name==$(this).text()) this.innerText = players[i].points + " | " + this.innerText;
+			if(players[i].name==$(this).text()) {
+				this.innerText = players[i].points + " | " + this.innerText;	
+				i = players.length + 100;
+			} 
 		}
+		if(i!==players.length+100) this.innerText = "           ";
 	});
 });
 
