@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.0.1.6
+// @version     1.0.1.7
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @grant       GM_log
 // ==/UserScript==
@@ -80,6 +80,7 @@ var sortPlayers = function(table) {
 	var tmpTabPts;
 
 	for(var i=0;i<tTr.length/2;++i){
+		// TODO: BUG: Il y a peut être plus d'un seul sibling à prendre !!!!!!
 		tabPts.push({
 			tr 		: tTr[i*2],
 			sibling : tTr[i*2+1],
@@ -125,7 +126,7 @@ GetAllPlayers(function(players) {
 	});
 });
 
-sortPlayers($("div.espionListe > fieldset.espionColonne2Liste > table"));
+//sortPlayers($("div.espionListe > fieldset.espionColonne2Liste > table"));
 
 
 // Ajout de la gestion du clic.
