@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.0.1.5
+// @version     1.0.1.6
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @grant       GM_log
 // ==/UserScript==
@@ -116,9 +116,8 @@ GetAllPlayers(function(players) {
 		for (i=0; i<players.length; ++i) {
 			if(players[i].name==$(this).text()) {
 				this.innerHTML = "|&nbsp;" + players[i].points + "&nbsp;|&nbsp;" + this.innerHTML;
-				console.log(this);
-				$(this).parent("tr")[0].playerName = players[i].name;
-				$(this).parent("tr")[0].playerPoints = parseFloat(((players[i].points==="")?"0":players[i].points).replace(".", ""));
+				$(this).parents("tr")[0].playerName = players[i].name;
+				$(this).parents("tr")[0].playerPoints = parseFloat(((players[i].points==="")?"0":players[i].points).replace(".", ""));
 				i = players.length + 100;
 			} 
 		}
