@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.0.1.13
+// @version     1.0.1.14
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @grant       GM_log
 // ==/UserScript==
@@ -139,9 +139,9 @@ GetAllPlayers(function(players) {
 		}
 		if(i<players.length+50) this.innerHTML = "|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;" + this.innerHTML;
 	});
+	sortPlayers($("div.espionListe > fieldset.espionColonne2Liste > table"));
 });
 
-sortPlayers($("div.espionListe > fieldset.espionColonne2Liste > table"));
 
 
 // Ajout de la gestion du clic.
