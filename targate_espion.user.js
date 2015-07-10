@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.0.1.10
+// @version     1.0.1.11
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @grant       GM_log
 // ==/UserScript==
@@ -113,9 +113,9 @@ var sortPlayers = function(table) {
 
 	// Utiliser "tbody.appendChild(myRow)" qui va déplacer les éléments puisqu'ils existent déjà dans le conteneur.
 	for(var i=0;i<tabPts.length;++i) {//for(var i=tabPts.length-1;i>=0;i--){
-		$tBody[0].appendChild(tabPts[i].tr);
+		$tBody.append($(tabPts[i].tr));
 		for(sib in tabPts[i].siblings) 
-			$tBody[0].appendChild(sib);
+			$tBody.append($(sib));
 		
 	}
 
