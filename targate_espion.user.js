@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.0.1.8
+// @version     1.0.1.9
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @grant       GM_log
 // ==/UserScript==
@@ -89,8 +89,7 @@ var sortPlayers = function(table) {
 		};
 
 		// Ajout de toutes les planètes du player dans le tableau pour les réafficher ensuite.
-		GM_log(tTr[i+1]);
-		while((i + 1<tTr.length) && tTr[i+1].is('[id]')) {
+		while((i + 1<tTr.length) && $(tTr[i+1]).is('[id]')) {
 			++i;
 			playerTr.siblings.push(tTr[i]);
 		}
@@ -115,7 +114,7 @@ var sortPlayers = function(table) {
 	for(var i=0;i<tabPts.length;++i) {//for(var i=tabPts.length-1;i>=0;i--){
 		table[0].appendChild(tabPts[i].tr);
 		for(sib in tabPts[i].siblings) 
-			table[0].appendChild(sib[0]);
+			table[0].appendChild(sib);
 		
 	}
 
