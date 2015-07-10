@@ -9,7 +9,6 @@
 // @grant       GM_log
 // ==/UserScript==
 WP_DEBUG = true;
-qsdhjqslmekfhqeilrugfnqsfrneuir
 
 
 var getTextNodesIn = function(el) {
