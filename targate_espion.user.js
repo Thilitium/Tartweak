@@ -18,7 +18,7 @@ var getTextNodesIn = function(el) {
 };
 
 //TODO: Vérifier la valeur pour un entrepôt niveau 3 (ce ne doit pas etre 540k je pense)
-var maxRes = [100000, 170000, 380000, 540000, 1290000, 2340000, 4860000, 8430000, 14450000, 24250000, 40420000, 66670000, 109020000];
+var maxRes = [100000, 170000, 380000, 540000, 1290000, 2340000, 4860000, 8430000, 14450000, 24250000, 40420000, 66670000, 109020000, 177200000];
 //TODO: Récupérer les valeurs manquantes
 var maxTrit = [100000, 0, 0, 0, 1290000, 2340000, 3950000, 0, 11020000, 17950000, 25800000];
 
@@ -61,9 +61,11 @@ var GetAllPlayers = function( callback, error) {
 			// Récupération des joueurs et de leurs points.
 			var players = [];
 			$(body).find(".colorwhite > center > table > tbody > tr:not([height])").each(function() {
-				players.push({
+				var player = {
 					name : $(this).find("a:eq(0)").text(), 
-					points: $(this).children("[class]").text()});
+					points: $(this).children("[class]").text()
+				};
+				players.push(player);
 			});
 	        // Appel du callback de bâtiment trouvé.
 	        if(callback!==null) callback(players);
@@ -79,16 +81,22 @@ var sortPlayers = function(table) {
 	var fini = false;
 	var tmpTabPts;
 
-	for(var i=0;i<tTr.length/2;++i){
-		// TODO: BUG: Il y a peut être plus d'un seul sibling à prendre !!!!!!
-		tabPts.push({
-			tr 		: tTr[i*2],
-			sibling : tTr[i*2+1],
-			pts 	: tTr[i*2].payerPoints,
-			posorig : i*2
-		});
+	for(var i=0;i<tTr.length;++i){
+		var playerTr = {
+			tr 		: tTr[i],
+			pts 	: tTr[i].payerPoints,
+			siblings: []
+		};
+
+		// Ajout de toutes les planètes du player dans le tableau pour les réafficher ensuite.
+		while((i<tTr.length) && tTr[i+1].is('[id]')) {
+			playerTr.siblings.push(tTr[i]);
+			++i;
+		}
+		tabPts.push(playerTr);
 	}
 
+	// Tri à bulle des joueurs.
 	while(!fini) {
 		fini = true;
 		prevPts = 0;
@@ -102,9 +110,12 @@ var sortPlayers = function(table) {
 		}
 	}
 
-	for(var i=tabPts.length-1;i>=0;i--){
-		table.prepend(tabPts[i].sibling);
-		table.prepend(tabPts[i].tr);
+	// Utiliser "tbody.appendChild(myRow)" qui va déplacer les éléments puisqu'ils existent déjà dans le conteneur.
+	for(var i=0;i<tabPts.length;++i) {//for(var i=tabPts.length-1;i>=0;i--){
+		table[0].appendChild(tabPts[i].tr);
+		for(sib in tabPts[i].siblings) 
+			table[0].appendChild(sib[0]);
+		
 	}
 
 
@@ -126,7 +137,7 @@ GetAllPlayers(function(players) {
 	});
 });
 
-//sortPlayers($("div.espionListe > fieldset.espionColonne2Liste > table"));
+sortPlayers($("div.espionListe > fieldset.espionColonne2Liste > table"));
 
 
 // Ajout de la gestion du clic.
