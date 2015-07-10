@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.0.1.9
+// @version     1.0.1.10
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @grant       GM_log
 // ==/UserScript==
@@ -38,7 +38,7 @@ var valeurCle = function(txtObj) {
 	return parseInt(txt.substr(txt.indexOf(":")+1, txt.length).replace(/\./g, ''));
 };
 
-var GetAllPlayers = function( callback, error) {
+var GetAllPlayers = function(callback, error) {
     // Requête sur la page des bâtiments.
     var xhr = new XMLHttpRequest();
     //var params = "planete="+codeP;	// Code de la planète de provenance. Nécessaire dans le form.
@@ -76,7 +76,8 @@ var GetAllPlayers = function( callback, error) {
 
 // Tri des joueurs dans l'interface en fonction des tags "playerName" et "playerPoints" des TR.
 var sortPlayers = function(table) {
-	var tTr = $(table).find("tr");
+	var $tBody = $(table).find("tbody");
+	var tTr = $tBody.find("tr");
 	var tabPts = [];
 	var fini = false;
 	var tmpTabPts;
@@ -112,9 +113,9 @@ var sortPlayers = function(table) {
 
 	// Utiliser "tbody.appendChild(myRow)" qui va déplacer les éléments puisqu'ils existent déjà dans le conteneur.
 	for(var i=0;i<tabPts.length;++i) {//for(var i=tabPts.length-1;i>=0;i--){
-		table[0].appendChild(tabPts[i].tr);
+		$tBody[0].appendChild(tabPts[i].tr);
 		for(sib in tabPts[i].siblings) 
-			table[0].appendChild(sib);
+			$tBody[0].appendChild(sib);
 		
 	}
 
