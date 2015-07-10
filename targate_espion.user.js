@@ -10,6 +10,12 @@
 // ==/UserScript==
 WP_DEBUG = true;
 qsdhjqslmekfhqeilrugfnqsfrneuir
+qsdhjqslmekfhqeilrugfnqsfrneuir
+qsdhjqslmekfhqeilrugfnqsfrneuir
+qsdhjqslmekfhqeilrugfnqsfrneuir
+qsdhjqslmekfhqeilrugfnqsfrneuir
+qsdhjqslmekfhqeilrugfnqsfrneuir
+qsdhjqslmekfhqeilrugfnqsfrneuir
 
 
 var getTextNodesIn = function(el) {
