@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.0.1.17
+// @version     1.0.1.18
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @grant       GM_log
 // ==/UserScript==
@@ -85,9 +85,9 @@ var sortPlayers = function(table, players) {
 
 	for(var i=0;i<tTr.length;++i){
 		var points = 0;
-		for(player in players) 
-			if(players.name===$(tTr[i*2]).find("div").text()) 
-				points = parseFloat(((players[i].points==="")?"0":players[i].points).replace(".", ""));
+		for(var iP=0;iP<players.length;++iP)
+			if(players[iP].name===$(tTr[i*2]).find("div").text()) 
+				points = parseFloat(((players[iP].points==="")?"0":players[iP].points).replace(".", ""));
 		var playerTr = {
 			trs 	: [$(tTr[i * 2]), $(tTr[i * 2 + 1])],
 			pts 	: points
