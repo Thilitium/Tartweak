@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.0.1.16
+// @version     1.0.1.17
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @grant       GM_log
 // ==/UserScript==
@@ -75,7 +75,7 @@ var GetAllPlayers = function(callback, error) {
 };
 
 // Tri des joueurs dans l'interface en fonction des tags "playerName" et "playerPoints" des TR.
-var sortPlayers = function(table) {
+var sortPlayers = function(table, players) {
 	var $tBody = $(table).find("tbody");
 	var tTr = $tBody.children();
 	var tabPts = [];
@@ -84,9 +84,13 @@ var sortPlayers = function(table) {
 
 
 	for(var i=0;i<tTr.length;++i){
+		var points = 0;
+		for(player in players) 
+			if(players.name===$(tTr[i*2]).find("div").text()) 
+				points = parseFloat(((players[i].points==="")?"0":players[i].points).replace(".", ""));
 		var playerTr = {
 			trs 	: [$(tTr[i * 2]), $(tTr[i * 2 + 1])],
-			pts 	: tTr[i * 2].payerPoints,
+			pts 	: points
 		};
 		tabPts.push(playerTr);
 	}
@@ -125,7 +129,7 @@ GetAllPlayers(function(players) {
 		}
 		if(i<players.length+50) this.innerHTML = "|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;" + this.innerHTML;
 	});
-	sortPlayers($("div.espionListe > fieldset.espionColonne2Liste > table"));
+	sortPlayers($("div.espionListe > fieldset.espionColonne2Liste > table"), players);
 });
 
 
