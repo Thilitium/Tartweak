@@ -77,7 +77,7 @@ var GetAllPlayers = function(callback, error) {
 // Tri des joueurs dans l'interface en fonction des tags "playerName" et "playerPoints" des TR.
 var sortPlayers = function(table) {
 	var $tBody = $(table).find("tbody");
-	var tTr = $tBody.find("tr");
+	var tTr = $tBody.children();
 	var tabPts = [];
 	var fini = false;
 	var tmpTabPts;
@@ -85,20 +85,13 @@ var sortPlayers = function(table) {
 
 	for(var i=0;i<tTr.length;++i){
 		var playerTr = {
-			tr 		: tTr[i],
+			trs 	: [$(tTr[i * 2]), $(tTr[i * 2 + 1])],
 			pts 	: tTr[i].payerPoints,
-			siblings: []
 		};
-
-		// Ajout de toutes les planètes du player dans le tableau pour les réafficher ensuite.
-		while((i + 1<tTr.length) && $(tTr[i+1]).is('[id]')) {
-			++i;
-			playerTr.siblings.push(tTr[i]);
-		}
 		tabPts.push(playerTr);
 	}
 
-	// Tri à bulle des joueurs.
+	// Tri à bulle des joueurs (DESC).
 	while(!fini) {
 		fini = true;
 		prevPts = 0;
@@ -112,15 +105,8 @@ var sortPlayers = function(table) {
 		}
 	}
 
-	tTr.detach();
-	for(var i=0;i<tabPts.length;++i) {//for(var i=tabPts.length-1;i>=0;i--){
-		//$tBody.append($(tabPts[i].tr));
-		$tBody.append(tabPts[i].tr);
-		for(sib in tabPts[i].siblings) 
-			$tBody.append(sib);
-			//$tBody.append($(sib));
-		
-	}
+	for(var i=0;i<tabPts.length;++i) 
+		$tBody.prepend(tabPts[i].trs);
 
 
 };
