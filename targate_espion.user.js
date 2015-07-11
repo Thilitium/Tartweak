@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.0.1.15
+// @version     1.0.1.16
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @grant       GM_log
 // ==/UserScript==
@@ -86,7 +86,7 @@ var sortPlayers = function(table) {
 	for(var i=0;i<tTr.length;++i){
 		var playerTr = {
 			trs 	: [$(tTr[i * 2]), $(tTr[i * 2 + 1])],
-			pts 	: tTr[i].payerPoints,
+			pts 	: tTr[i * 2].payerPoints,
 		};
 		tabPts.push(playerTr);
 	}
