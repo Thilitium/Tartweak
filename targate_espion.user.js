@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.0.1.19
+// @version     1.0.1.20
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @grant       GM_log
 // ==/UserScript==
@@ -85,9 +85,13 @@ var sortPlayers = function(table, players) {
 
 	for(var i=0;i<tTr.length;++i){
 		var points = 0;
+		GM_log("Player : " + $(tTr[i*2]).find("div").text());
+		GM_log("-------------------------------------------");
 		for(var iP=0;iP<players.length;++iP) {
+			GM_log("Check '" + players[iP].name + "' === '" + $(tTr[i*2]).find("div").text() + "'");
 			if(players[iP].name===$(tTr[i*2]).find("div").text()) {
 				points = parseFloat(((players[iP].points==="")?"0":players[iP].points).replace(".", ""));
+				GM_log("Succes ! Points = " + points);
 			}
 		}
 		var playerTr = {
@@ -97,7 +101,7 @@ var sortPlayers = function(table, players) {
 		tabPts.push(playerTr);
 	}
 
-	// Tri à bulle des joueurs (DESC).
+	/*/ Tri à bulle des joueurs (DESC).
 	while(!fini) {
 		fini = true;
 		prevPts = 0;
@@ -112,7 +116,7 @@ var sortPlayers = function(table, players) {
 	}
 
 	for(var i=0;i<tabPts.length;++i) 
-		$tBody.prepend(tabPts[i].trs);
+		$tBody.prepend(tabPts[i].trs);*/
 
 
 };
