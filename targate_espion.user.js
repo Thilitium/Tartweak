@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.0.1.25
+// @version     1.0.1.26
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @grant       GM_log
 // ==/UserScript==
@@ -83,7 +83,7 @@ var sortPlayers = function(table, players) {
 	var tmpTabPts;
 
 
-	for(var i=0;i<tTr.length;++i){
+	for(var i=0;i<tTr.length/2;++i){
 		var attr = tTr[i*2].getAttribute('data-playerpoints');
 		var points = 0;
 		if(attr !== null) points = parseInt(attr);
@@ -97,7 +97,7 @@ var sortPlayers = function(table, players) {
 
 	GM_log(tabPts);
 
-	/*/ Tri à bulle des joueurs (DESC).
+	// Tri à bulle des joueurs (DESC).
 	while(!fini) {
 		fini = true;
 		prevPts = 0;
@@ -111,6 +111,7 @@ var sortPlayers = function(table, players) {
 		}
 	}
 
+	// Réorganisation du tableau des joueurs dans l'ordre.
 	for(var i=0;i<tabPts.length;++i) 
 		$tBody.prepend(tabPts[i].trs);*/
 
