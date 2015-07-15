@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.0.1.33
+// @version     1.0.1.34
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @grant       GM_log
 // ==/UserScript==
@@ -110,8 +110,12 @@ var sortPlayers = function(table, players) {
 
 	// Réorganisation du tableau des joueurs dans l'ordre.
 	for(var i=0;i<tabPts.length;++i) {
-		if(tabPts.pts > 0)
+		GM_log(tabPts.pts);
+		if(tabPts.pts > 0){
+			GM_log("prepend...");
 			$tBody.prepend(tabPts[i].trs);
+			GM_log("OK");
+		}
 	}
 
 	// DEBUG
