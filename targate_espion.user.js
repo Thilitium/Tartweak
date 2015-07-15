@@ -86,6 +86,7 @@ var sortPlayers = function(table, players) {
 	for(var i=0;i<tTr.length;++i){
 		var points = 0;
 		GM_log("Player : " + $(tTr[i*2]).find("div").text());
+		GM_log("Test sur div.playerName : " + $(tTr[i*2]).find("div")[0].playerName);
 		GM_log("-------------------------------------------");
 		for(var iP=0;iP<players.length;++iP) {
 			GM_log("Check '" + players[iP].name + "' === '" + $(tTr[i*2]).find("div").text() + "'");
@@ -128,6 +129,8 @@ GetAllPlayers(function(players) {
 		for (i=0; i<players.length; ++i) {
 			if(players[i].name==$(this).text()) {
 				this.innerHTML = "|&nbsp;" + players[i].points + "&nbsp;|&nbsp;" + this.innerHTML;
+				this.playerName = players[i].name;
+				this.playerPoints = parseFloat(((players[i].points==="")?"0":players[i].points).replace(".", ""));
 				$(this).parents("tr")[0].playerName = players[i].name;
 				$(this).parents("tr")[0].playerPoints = parseFloat(((players[i].points==="")?"0":players[i].points).replace(".", ""));
 				i = players.length + 100;
