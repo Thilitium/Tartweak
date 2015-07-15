@@ -4,11 +4,45 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.0.2.4
+// @version     1.0.2.10
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @grant       GM_log
 // ==/UserScript==
 WP_DEBUG = true;
+
+$.queue = {
+    _timer: null,
+    _queue: [],
+    add: function(fn, context, time) {
+        var setTimer = function(time) {
+            $.queue._timer = setTimeout(function() {
+                time = $.queue.add();
+                if ($.queue._queue.length) {
+                    setTimer(time);
+                }
+            }, time || 2);
+        }
+
+        if (fn) {
+            $.queue._queue.push([fn, context, time]);
+            if ($.queue._queue.length == 1) {
+                setTimer(time);
+            }
+            return;
+        }
+
+        var next = $.queue._queue.shift();
+        if (!next) {
+            return 0;
+        }
+        next[0].call(next[1] || window);
+        return next[2];
+    },
+    clear: function() {
+        clearTimeout($.queue._timer);
+        $.queue._queue = [];
+    }
+};
 
 
 var getTextNodesIn = function(el) {
@@ -76,9 +110,9 @@ var GetAllPlayers = function(callback, error) {
 
 // Tri des joueurs dans l'interface en fonction des tags "playerName" et "playerPoints" des TR.
 var sortPlayers = function(table, players) {
-	var $tBody = $(table).find("tbody");
+	$tBody = $(table).find("tbody");
+	tabPts = [];
 	var tTr = $tBody.children();
-	var tabPts = [];
 	var fini = false;
 	var tmpTabPts;
 
@@ -108,47 +142,11 @@ var sortPlayers = function(table, players) {
 		}
 	}
 
-	//-------------------------------
-	queue = {
-	    _timer: null,
-	    _queue: [],
-	    add: function(fn, context, time) {
-	        var setTimer = function(time) {
-	            queue._timer = setTimeout(function() {
-	                time = queue.add();
-	                if (queue._queue.length) {
-	                    setTimer(time);
-	                }
-	            }, time || 2);
-	        }
-
-	        if (fn) {
-	            queue._queue.push([fn, context, time]);
-	            if (queue._queue.length == 1) {
-	                setTimer(time);
-	            }
-	            return;
-	        }
-
-	        var next = queue._queue.shift();
-	        if (!next) {
-	            return 0;
-	        }
-	        next[0].call(next[1] || window);
-	        return next[2];
-	    },
-	    clear: function() {
-	        clearTimeout(queue._timer);
-	        queue._queue = [];
-	    }
-	};
-	//-------------------------------
-
 	// Réorganisation du tableau des joueurs dans l'ordre.
 	for(var i=0;i<tabPts.length;++i) {
 		if(tabPts[i].pts > 0){
 			var func = function() { $tBody.prepend(tabPts[i].trs); };
-			queue.add(func, this);
+			$.queue.add(func, this);
 		}
 	}
 };
