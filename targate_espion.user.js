@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.0.1.29
+// @version     1.0.1.30
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @grant       GM_log
 // ==/UserScript==
@@ -86,7 +86,7 @@ var sortPlayers = function(table, players) {
 	for(var i=0;i<tTr.length/2;++i){
 		var attr = tTr[i*2].getAttribute('data-playerpoints');
 		var points = 0;
-		if(attr !== null) points = parseFloat(attr);
+		if(attr !== null) points = parseInt(attr);
 		var playerTr = {
 			trs 	: [$(tTr[i * 2]), $(tTr[i * 2 + 1])],
 			pts 	: points
@@ -109,8 +109,9 @@ var sortPlayers = function(table, players) {
 	}
 
 	// Réorganisation du tableau des joueurs dans l'ordre.
-	for(var i=0;i<tabPts.length;++i) 
+	for(var i=0;i<tabPts.length;++i) {
 		$tBody.prepend(tabPts[i].trs);
+	}
 
 
 };
@@ -123,7 +124,7 @@ GetAllPlayers(function(players) {
 			if(players[i].name==$(this).text()) {
 				this.innerHTML = "|&nbsp;" + players[i].points + "&nbsp;|&nbsp;" + this.innerHTML;
 				$(this).parents("tr")[0].setAttribute('data-playername', players[i].name);
-				$(this).parents("tr")[0].setAttribute('data-playerpoints', ((players[i].points.length <= 0)?"0":players[i].points.replace(".", "")));
+				$(this).parents("tr")[0].setAttribute('data-playerpoints', ((players[i].points.length <= 0)?"0":players[i].points.replace("/\./g", "")));
 				i = players.length + 100;
 			} 
 		}
