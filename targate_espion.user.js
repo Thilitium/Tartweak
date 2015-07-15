@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.0.1.21
+// @version     1.0.1.22
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @grant       GM_log
 // ==/UserScript==
@@ -84,23 +84,16 @@ var sortPlayers = function(table, players) {
 
 
 	for(var i=0;i<tTr.length;++i){
-		var points = 0;
-		GM_log("Player : " + $(tTr[i*2]).find("div").text());
-		GM_log("Test sur div.playerName : " + $(tTr[i*2]).find("div")[0].playerName);
-		GM_log("-------------------------------------------");
-		for(var iP=0;iP<players.length;++iP) {
-			GM_log("Check '" + players[iP].name + "' === '" + $(tTr[i*2]).find("div").text() + "'");
-			if(players[iP].name===$(tTr[i*2]).find("div").text()) {
-				points = parseFloat(((players[iP].points==="")?"0":players[iP].points).replace(".", ""));
-				GM_log("Succes ! Points = " + points);
-			}
-		}
+		var points = parseFloat($(tTr[i*2]).getAttribute('data-playerpoints'));
+		GM_log(points);
 		var playerTr = {
 			trs 	: [$(tTr[i * 2]), $(tTr[i * 2 + 1])],
 			pts 	: points
 		};
 		tabPts.push(playerTr);
 	}
+
+	GM_log(tabPts);
 
 	/*/ Tri à bulle des joueurs (DESC).
 	while(!fini) {
@@ -129,10 +122,8 @@ GetAllPlayers(function(players) {
 		for (i=0; i<players.length; ++i) {
 			if(players[i].name==$(this).text()) {
 				this.innerHTML = "|&nbsp;" + players[i].points + "&nbsp;|&nbsp;" + this.innerHTML;
-				this.playerName = players[i].name;
-				this.playerPoints = parseFloat(((players[i].points==="")?"0":players[i].points).replace(".", ""));
-				$(this).parents("tr")[0].playerName = players[i].name;
-				$(this).parents("tr")[0].playerPoints = parseFloat(((players[i].points==="")?"0":players[i].points).replace(".", ""));
+				$(this).parents("tr")[0].setAttribute('data-playername', players[i].name);
+				$(this).parents("tr")[0].setAttribute('data-playerpoints', parseFloat(((players[i].points==="")?"0":players[i].points).replace(".", "")));
 				i = players.length + 100;
 			} 
 		}
