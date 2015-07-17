@@ -117,8 +117,6 @@ var sortPlayers = function(table, players) {
 	var fini = false;
 	var tmpTabPts;
 
-	$table.hide();
-
 	for(var i=0;i<tTr.length/2;++i){
 		var attr = tTr[i*2].getAttribute('data-playerpoints');
 		var points = 0;
