@@ -144,9 +144,12 @@ var sortPlayers = function(table, players) {
 
 	// Réorganisation du tableau des joueurs dans l'ordre.
 	var trAppend = [];
-	for(var i=0;i<tabPts.length;++i) 
-		if(tabPts[i].pts > 0)
-			trAppend.push(tabPts[i].trs);
+	for(var i=0;i<tabPts.length;++i) {
+		if(tabPts[i].pts > 0) {
+			trAppend.push(tabPts[i].trs[0]);
+			trAppend.push(tabPts[i].trs[1]);
+		}
+	}
 	
 	$table.append(trAppend);
 
