@@ -4,46 +4,15 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.0.3.4
+// @version     1.1
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @grant       GM_log
 // ==/UserScript==
 WP_DEBUG = true;
 
-$.queue = {
-    _timer: null,
-    _queue: [],
-    add: function(fn, context, time) {
-        var setTimer = function(time) {
-            $.queue._timer = setTimeout(function() {
-                time = $.queue.add();
-                if ($.queue._queue.length) {
-                    setTimer(time);
-                }
-            }, time || 2);
-        }
-
-        if (fn) {
-            $.queue._queue.push([fn, context, time]);
-            if ($.queue._queue.length == 1) {
-                setTimer(time);
-            }
-            return;
-        }
-
-        var next = $.queue._queue.shift();
-        if (!next) {
-            return 0;
-        }
-        next[0].call(next[1] || window);
-        return next[2];
-    },
-    clear: function() {
-        clearTimeout($.queue._timer);
-        $.queue._queue = [];
-    }
-};
-
+/***** TODO *****\
+ - Détecter les joueurs avec des alliances et intégrer.
+\****************/
 
 var getTextNodesIn = function(el) {
     return $(el).find(":not(iframe)").addBack().contents().filter(function() {
@@ -151,7 +120,7 @@ var sortPlayers = function(table, players) {
 		}
 	}
 	
-	$table.append(trAppend);
+	$table.prepend(trAppend);
 
 
 	// TROP LONG
