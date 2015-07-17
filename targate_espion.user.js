@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.0.3.1
+// @version     1.0.3.2
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @grant       GM_log
 // ==/UserScript==
@@ -110,12 +110,14 @@ var GetAllPlayers = function(callback, error) {
 
 // Tri des joueurs dans l'interface en fonction des tags "playerName" et "playerPoints" des TR.
 var sortPlayers = function(table, players) {
-	var $tBody = $(table).find("tbody");
+	var $table = $(table);
+	var $tBody = $table.find("tbody");
 	var tabPts = [];
 	var tTr = $tBody.children();
 	var fini = false;
 	var tmpTabPts;
 
+	$table.hide();
 
 	for(var i=0;i<tTr.length/2;++i){
 		var attr = tTr[i*2].getAttribute('data-playerpoints');
@@ -146,6 +148,7 @@ var sortPlayers = function(table, players) {
 	$.each(tabPts, function(key, value) {
 		$.queue.add(function() { $tBody.prepend(value.trs); }, undefined, 50);
 	});
+	$table.show();
 };
 
 // Ajout des points des joueurs
