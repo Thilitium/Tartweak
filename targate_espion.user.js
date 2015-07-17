@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.1.1
+// @version     1.1.1.1
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @grant       GM_log
 // ==/UserScript==
@@ -21,6 +21,7 @@ WP_DEBUG = true;
 /***** CHANGELOG *****\
  - 1.1			: Réorganisation du tableau de joueurs.
  - 1.1.1		: Détection des alliances.
+ - 1.1.1.1		: Problème dans la détection des alliances corrigé.
 \*********************/
 
 var getTextNodesIn = function(el) {
@@ -138,8 +139,8 @@ GetAllPlayers(function(players) {
 		var i;
 		for (i=0; i<players.length; ++i) {
 			var elPlayerName = $(this).text();
-			var iParentese = elPlayerName .indexOf("(");
-			var elPlayerNameNoAlliance = elPlayerName.substr(0, iParentese<=0?elPlayerName.length:iParentese - 1);
+			var iParentese = elPlayerName.indexOf("(") - 1;
+			var elPlayerNameNoAlliance = elPlayerName.substr(0, (iParentese<=0)?(elPlayerName.length):(iParentese - 1));
 
 
 			if(players[i].name==elPlayerNameNoAlliance) {
