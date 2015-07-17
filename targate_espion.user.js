@@ -4,15 +4,24 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.1
+// @version     1.1.1
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @grant       GM_log
 // ==/UserScript==
 WP_DEBUG = true;
 
-/***** TODO *****\
- - Détecter les joueurs avec des alliances et intégrer.
+/***** BUGS *****\
+ - Après clic sur 'analyser', la reposition de la fenêtre et le calcul des ressources n'est pas déclenché.
 \****************/
+
+/***** TODO *****\
+ - Option ASC/DESC pour le classement des joueurs.
+\****************/
+
+/***** CHANGELOG *****\
+ - 1.1			: Réorganisation du tableau de joueurs.
+ - 1.1.1		: Détection des alliances.
+\*********************/
 
 var getTextNodesIn = function(el) {
     return $(el).find(":not(iframe)").addBack().contents().filter(function() {
@@ -121,12 +130,6 @@ var sortPlayers = function(table, players) {
 	}
 	
 	$table.prepend(trAppend);
-
-
-	// TROP LONG
-	/*$.each(tabPts, function(key, value) {
-		$.queue.add(function() { $tBody.prepend(value.trs); }, undefined, 50);
-	});*/
 };
 
 // Ajout des points des joueurs
@@ -134,7 +137,12 @@ GetAllPlayers(function(players) {
 	$("div.espionListe > fieldset.espionColonne2Liste > table > tbody > tr:not([id]) > td > div").each(function() {
 		var i;
 		for (i=0; i<players.length; ++i) {
-			if(players[i].name==$(this).text()) {
+			var elPlayerName = $(this).text();
+			var iParentese = elPlayerName .indexOf("(");
+			var elPlayerNameNoAlliance = elPlayerName.substr(0, iParentese<=0?elPlayerName.length:iParentese - 1);
+
+
+			if(players[i].name==elPlayerNameNoAlliance) {
 				this.innerHTML = "|&nbsp;" + players[i].points + "&nbsp;|&nbsp;" + this.innerHTML;
 				$(this).parents("tr")[0].setAttribute('data-playername', players[i].name);
 				$(this).parents("tr")[0].setAttribute('data-playerpoints', ((players[i].points.length <= 0)?"0":players[i].points.replace(/\./g, "")));
