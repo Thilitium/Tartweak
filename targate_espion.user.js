@@ -16,6 +16,8 @@ WP_DEBUG = true;
 
 /***** TODO *****\
  - Option ASC/DESC pour le classement des joueurs.
+ - Ajouter le nombre de VAB nécessaires pour le pillage.
+ - Régler les ressources des entrepôts.
 \****************/
 
 /***** CHANGELOG *****\
@@ -31,9 +33,9 @@ var getTextNodesIn = function(el) {
 };
 
 //TODO: Vérifier la valeur pour un entrepôt niveau 3 (ce ne doit pas etre 540k je pense)
-var maxRes = [100000, 170000, 380000, 540000, 1290000, 2340000, 4860000, 8430000, 14450000, 24250000, 40420000, 66670000, 109020000, 177200000];
+var maxRes = [100000, 170000, 380000, 540000, 1290000, 2340000, 4860000, 8430000, 14450000, 24250000, 40420000, 66670000, 109020000, 177200000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 //TODO: Récupérer les valeurs manquantes
-var maxTrit = [100000, 0, 0, 0, 1290000, 2340000, 3950000, 0, 11020000, 17950000, 25800000];
+var maxTrit = [100000, 0, 0, 0, 1290000, 2340000, 3950000, 0, 11020000, 17950000, 25800000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 var demiResPour = function(level, tritium) {
 	if(tritium) 
