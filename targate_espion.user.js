@@ -4,10 +4,12 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.2.0.1
+// @version     1.2.0.2
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @grant       GM_log
+// @grant 		GM_setValue
+// @grant 		GM_getValue
 // ==/UserScript==
 WP_DEBUG = true;
 
@@ -262,19 +264,21 @@ var Notes = {
 				// Clic molette pour ouvrir la fenêtre.
 				if(e.which === 2) {
 					e.preventDefault();
-					self.EditingPlayerName = $(this).attr("data-playername");
+					self.EditingPlayerName = $(this).parents("tr").attr("data-playername");
 					self.InputEl.css("top", e.pageY+5);
 					self.InputEl.css("left", e.pageX+5);
 					self.InputEl.removeClass("ttthidden");
-					var txtInput = self.InputEl.first();
-					txtInput[0].text = self.GetNote(self.EditingPlayerName);
+					var txtInput = self.InputEl.children()[0];
+					txtInput.text = self.GetNote(self.EditingPlayerName);
 					return false;
 				}
-			});
-		self.InputEl.last().click(function(e) {
+			}
+		);
+
+		self.InputEl.children().last().click(function(e) {
 			self.InputEl.addClass("ttthidden");
 			if(self.EditingPlayerName.length > 0)
-				self.SaveNote(self.EditingPlayerName, self.InputEl.first().text());
+				self.SaveNote(self.EditingPlayerName, self.InputEl.children().first().text());
 			self.EditingPlayerName = "";
 		});
 	},
