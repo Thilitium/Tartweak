@@ -4,14 +4,14 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.1.2.6
+// @version     1.2.0.0
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
+// @require 	http://userscripts.org/scripts/source/107941.user.js 
 // @grant       GM_log
 // ==/UserScript==
 WP_DEBUG = true;
 
 /***** BUGS *****\
- - Après clic sur 'analyser', la reposition de la fenêtre et le calcul des ressources n'est pas déclenché.
 \****************/
 
 /***** TODO *****\
@@ -19,6 +19,8 @@ WP_DEBUG = true;
  - Ajouter le nombre de VAB nécessaires pour le pillage.
  - Régler les ressources des entrepôts.
  - Afficher le résultat de la simulation de combat dans la page, si demandé par l'utilisateur (spatial ou terrestre).
+ - Possibilité d'ajouter/consulter des notes concernant les utilisateurs (planètes ?) directement depuis le centre d'espionnage.
+     + Trier les joueurs avec des notes ?
 \****************/
 
 /***** CHANGELOG *****\
@@ -28,6 +30,7 @@ WP_DEBUG = true;
  - 1.1.1.3		: Complétion et correction de valeurs dans les tableaux des entrepôts.
  - 1.1.2.0		: Correction des events handlers sur les boutons bleus.
  - 1.1.2.6		: Ajustements.
+ - 1.2.0.0		: Ajout de la fonctionnalité d'ajout des notes.
 \*********************/
 
 var getTextNodesIn = function(el) {
@@ -174,7 +177,7 @@ var initPanel = function() {
     });
 
 	$(".boutonBleu").click(function() {
-		setTimeout(initPanel, 750);
+		setTimeout(initPanel, 700);
 	});
 
     if (rapportRsrc.length>0 && rapportBats.length>0) {
@@ -214,5 +217,70 @@ var initPanel = function() {
 $(".coloraqua").click(function() {
     setTimeout(function() {
     	initPanel();
-    }, 750);
+    }, 700);
 });
+
+
+
+
+// Module de gestion des notes sur les joueurs.
+var Notes = {
+	InputEl : $("<div id='tttdivinput' class='ttthidden'>" +
+					"<input type='text' id='tttnoteinput'/></td>" +
+					"<button content='OK' id='tttnoteok'/>"
+				"</div>"),
+	EditingPlayerName : "",
+	InsertCss : function() {
+		var css =
+			"#tttdivinput {" +
+				"height: 4cm;" +
+				"width: 4cm;" +
+				"border: 1mm solid black;" +
+				"border-radius: 1mm;" +
+				"background-color: black;" +
+				"position: absolute;" +
+			"}" +
+			"#tttnoteinput {" +
+				"width: 100%;"
+			"}" +
+			".ttthidden {" +
+				"display:none;" +
+			"}";
+	},
+	SaveNote : function(playerName, noteContent) {
+		GM_SuperValue.set("note:" + playerName, noteContent); 
+	},
+	GetNote : function(playerName) {
+		return GM_SuperValue.get("note:" + playerName);
+	},
+	AddEventsHandler : function() {
+		var self = this;
+		$("div.espionListe > fieldset.espionColonne2Liste > table > tbody > tr:not([id]) > td > div").mouseup(
+			function(e) {
+				// Clic molette pour ouvrir la fenêtre.
+				if(e.which === 2) {
+					e.preventDefault();
+					self.EditingPlayerName = $(this).attr("data-playername");
+					self.InputEl.css("top", e.pageY+5);
+					self.InputEl.css("left", e.pageX+5);
+					self.InputEl.removeClass("ttthidden");
+					var txtInput = self.InputEl.first();
+					txtInput[0].text = self.GetNote(self.EditingPlayerName);
+					return false;
+				}
+			});
+		InputEl.last().click(function(e) {
+			self.InputEl.addClass("ttthidden");
+			if(self.EditingPlayerName.length > 0)
+				self.SaveNote(self.EditingPlayerName, self.InputEl.first().text());
+			self.EditingPlayerName = "";
+		});
+	},
+	Init : function() {
+		InsertCss();
+		$("body").prepend(InputEl);
+		AddEventsHandler();
+	}
+};
+
+Notes.Init();
