@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.2.0.2
+// @version     1.2.0.3
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @grant       GM_log
@@ -228,8 +228,8 @@ $(".coloraqua").click(function() {
 // Module de gestion des notes sur les joueurs.
 var Notes = {
 	InputEl : $("<div id='tttdivinput' class='ttthidden'>" +
-					"<input type='text' id='tttnoteinput'/></td>" +
-					"<button content='OK' id='tttnoteok'/>" +
+					"<input type='text' id='tttnoteinput'></input>" +
+					"<button id='tttnoteok'>OK</button>" +
 				"</div>"),
 	EditingPlayerName : "",
 	InsertCss : function() {
