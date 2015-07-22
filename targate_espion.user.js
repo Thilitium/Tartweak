@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.1.1.2
+// @version     1.1.2.0
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @grant       GM_log
 // ==/UserScript==
@@ -18,12 +18,15 @@ WP_DEBUG = true;
  - Option ASC/DESC pour le classement des joueurs.
  - Ajouter le nombre de VAB nécessaires pour le pillage.
  - Régler les ressources des entrepôts.
+ - Afficher le résultat de la simulation de combat dans la page, si demandé par l'utilisateur (spatial ou terrestre).
 \****************/
 
 /***** CHANGELOG *****\
  - 1.1			: Réorganisation du tableau de joueurs.
  - 1.1.1		: Détection des alliances.
  - 1.1.1.1		: Problème dans la détection des alliances corrigé.
+ - 1.1.1.3		: Complétion et correction de valeurs dans les tableaux des entrepôts.
+ - 1.1.2.0		: Correction des events handlers sur les boutons bleus.
 \*********************/
 
 var getTextNodesIn = function(el) {
@@ -35,7 +38,7 @@ var getTextNodesIn = function(el) {
 //TODO: Vérifier la valeur pour un entrepôt niveau 3 (ce ne doit pas etre 540k je pense)
 var maxRes = [100000, 170000, 380000, 540000, 1290000, 2340000, 4860000, 8430000, 14450000, 24250000, 40420000, 66670000, 109020000, 177200000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 //TODO: Récupérer les valeurs manquantes
-var maxTrit = [100000, 0, 0, 0, 1290000, 2340000, 3950000, 0, 11020000, 17950000, 25800000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+var maxTrit = [100000, 0, 0, 0, 1430000, 2340000, 4510000, 7660000, 12980000, 21520000, 35380000, 0, 92850000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 var demiResPour = function(level, tritium) {
 	if(tritium) 
@@ -158,51 +161,55 @@ GetAllPlayers(function(players) {
 });
 
 
-
-// Ajout de la gestion du clic.
-$(".coloraqua").add(".boutonBleu").click(function() {
-
-    setTimeout(function() {
-        
-        var rapportRsrc = $("fieldset.espionMoyenrapport:nth-child(2) > div:nth-child(3)");
-        var rapportBats = $("fieldset.espionGrandrapport").first();
-        $(".espionnageColonne1").prepend("<div class='tttespace' style='float:left;width=200px;' />");
+var initPanel = function() {
+    var rapportRsrc = $("fieldset.espionMoyenrapport:nth-child(2) > div:nth-child(3)");
+    var rapportBats = $("fieldset.espionGrandrapport").first();
+    $(".espionnageColonne1").prepend("<div class='tttespace' style='float:left;width=200px;' />");
+    $(".tttespace").width(100);
+    $(".tttespace").height(window.scrollY - 50);
+    $(window).scroll(function() {
         $(".tttespace").width(100);
         $(".tttespace").height(window.scrollY - 50);
-        $(window).scroll(function() {
-            $(".tttespace").width(100);
-            $(".tttespace").height(window.scrollY - 50);
-        });
+    });
 
-        if (rapportRsrc.length>0 && rapportBats.length>0) {
-            var txtRsrc = getTextNodesIn(rapportRsrc);
-            var txtBats = getTextNodesIn(rapportBats);
+    if (rapportRsrc.length>0 && rapportBats.length>0) {
+        var txtRsrc = getTextNodesIn(rapportRsrc);
+        var txtBats = getTextNodesIn(rapportBats);
 
-            if (txtRsrc.length === 4 && txtBats.length === 22) {
-            	var nivOr = valeurCle(txtBats[14]);
-            	var nivTi = valeurCle(txtBats[15]);
-            	var nivTr = valeurCle(txtBats[16]);
-            	var nivNo = valeurCle(txtBats[17]);
-                var or = valeurCle(txtRsrc[0]);
-                var titane = valeurCle(txtRsrc[1]);
-                var tritium = valeurCle(txtRsrc[2]);
-                var nourriture = valeurCle(txtRsrc[3]);
+        if (txtRsrc.length === 4 && txtBats.length === 22) {
+        	var nivOr = valeurCle(txtBats[14]);
+        	var nivTi = valeurCle(txtBats[15]);
+        	var nivTr = valeurCle(txtBats[16]);
+        	var nivNo = valeurCle(txtBats[17]);
+            var or = valeurCle(txtRsrc[0]);
+            var titane = valeurCle(txtRsrc[1]);
+            var tritium = valeurCle(txtRsrc[2]);
+            var nourriture = valeurCle(txtRsrc[3]);
 
-                var pillOr = pillPour(or, nivOr, false);
-                var pillTit = pillPour(titane, nivTi, false);
-                var pillNour = pillPour(nourriture, nivNo, false);
-                var pillTrit = pillPour(tritium, nivTr, true);
-                var pillTot = pillOr + pillTit + pillTrit + pillNour;
+            var pillOr = pillPour(or, nivOr, false);
+            var pillTit = pillPour(titane, nivTi, false);
+            var pillNour = pillPour(nourriture, nivNo, false);
+            var pillTrit = pillPour(tritium, nivTr, true);
+            var pillTot = pillOr + pillTit + pillTrit + pillNour;
 
-                var nbCarg = Math.ceil(pillTot / 40000);
-                var nbRavi = Math.ceil(pillTot / 20000);
+            var nbCarg = Math.ceil(pillTot / 40000);
+            var nbRavi = Math.ceil(pillTot / 20000);
 
-                var app = 	"<br/>" + "<div style='color:red;'>" +
-                    "Pillage : "  + pillTot + "<br/>" + 
-                    "Ravitailleurs&nbsp;: " + nbRavi + "<br/>" +
-                    "Cargos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: " + nbCarg + "<br/>" + "</div>";
-                rapportRsrc.append(app);
-            }
+            var app = 	"<br/>" + "<div style='color:red;'>" +
+                "Pillage : "  + pillTot + "<br/>" + 
+                "Ravitailleurs&nbsp;: " + nbRavi + "<br/>" +
+                "Cargos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: " + nbCarg + "<br/>" + "</div>";
+            rapportRsrc.append(app);
         }
-    }, 1250);
+    }
+}
+
+
+// Ajout de la gestion du clic.
+$(".coloraqua").click(function() {
+
+    //setTimeout(function() {
+    initPanel();
+    //}, 1250);
+	$(".boutonBleu").click(initPanel);
 });
