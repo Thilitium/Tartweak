@@ -228,7 +228,7 @@ $(".coloraqua").click(function() {
 // Module de gestion des notes sur les joueurs.
 var Notes = {
 	InputEl : $("<div id='tttdivinput' class='ttthidden'>" +
-					"<input type='text' id='tttnoteinput'></input>" +
+					"<textarea id='tttnoteinput'></textarea>" +
 					"<button id='tttnoteok'>OK</button>" +
 				"</div>"),
 	EditingPlayerName : "",
