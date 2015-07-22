@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.1.2.5
+// @version     1.1.2.6
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @grant       GM_log
 // ==/UserScript==
@@ -27,7 +27,7 @@ WP_DEBUG = true;
  - 1.1.1.1		: Problème dans la détection des alliances corrigé.
  - 1.1.1.3		: Complétion et correction de valeurs dans les tableaux des entrepôts.
  - 1.1.2.0		: Correction des events handlers sur les boutons bleus.
- - 1.1.2.5		: Ajustements.
+ - 1.1.2.6		: Ajustements.
 \*********************/
 
 var getTextNodesIn = function(el) {
@@ -173,6 +173,10 @@ var initPanel = function() {
         $(".tttespace").height(window.scrollY - 50);
     });
 
+	$(".boutonBleu").click(function() {
+		setTimeout(initPanel, 750);
+	});
+
     if (rapportRsrc.length>0 && rapportBats.length>0) {
         var txtRsrc = getTextNodesIn(rapportRsrc);
         var txtBats = getTextNodesIn(rapportBats);
@@ -208,11 +212,7 @@ var initPanel = function() {
 
 // Ajout de la gestion du clic.
 $(".coloraqua").click(function() {
-
     setTimeout(function() {
     	initPanel();
-		$(".boutonBleu").click(function() {
-			setTimeout(initPanel, 1000);
-		});
-    }, 1000);
+    }, 750);
 });
