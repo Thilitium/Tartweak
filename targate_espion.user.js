@@ -4,9 +4,9 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.2.0.0
+// @version     1.2.0.1
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
-// @require 	http://userscripts.org/scripts/source/107941.user.js 
+// @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @grant       GM_log
 // ==/UserScript==
 WP_DEBUG = true;
@@ -210,7 +210,7 @@ var initPanel = function() {
             rapportRsrc.append(app);
         }
     }
-}
+};
 
 
 // Ajout de la gestion du clic.
@@ -227,7 +227,7 @@ $(".coloraqua").click(function() {
 var Notes = {
 	InputEl : $("<div id='tttdivinput' class='ttthidden'>" +
 					"<input type='text' id='tttnoteinput'/></td>" +
-					"<button content='OK' id='tttnoteok'/>"
+					"<button content='OK' id='tttnoteok'/>" +
 				"</div>"),
 	EditingPlayerName : "",
 	InsertCss : function() {
@@ -241,11 +241,13 @@ var Notes = {
 				"position: absolute;" +
 			"}" +
 			"#tttnoteinput {" +
-				"width: 100%;"
+				"width: 100%;" +
 			"}" +
 			".ttthidden {" +
 				"display:none;" +
 			"}";
+
+		$("body").prepend("<style>" + css + "</style>");
 	},
 	SaveNote : function(playerName, noteContent) {
 		GM_SuperValue.set("note:" + playerName, noteContent); 
@@ -269,7 +271,7 @@ var Notes = {
 					return false;
 				}
 			});
-		InputEl.last().click(function(e) {
+		self.InputEl.last().click(function(e) {
 			self.InputEl.addClass("ttthidden");
 			if(self.EditingPlayerName.length > 0)
 				self.SaveNote(self.EditingPlayerName, self.InputEl.first().text());
@@ -277,9 +279,10 @@ var Notes = {
 		});
 	},
 	Init : function() {
-		InsertCss();
-		$("body").prepend(InputEl);
-		AddEventsHandler();
+        var self=this;
+        self.InsertCss();
+		$("body").prepend(self.InputEl);
+		self.AddEventsHandler();
 	}
 };
 
