@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.2.0.2
+// @version     1.2.1.0
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @grant       GM_log
@@ -33,6 +33,7 @@ WP_DEBUG = true;
  - 1.1.2.0		: Correction des events handlers sur les boutons bleus.
  - 1.1.2.6		: Ajustements.
  - 1.2.0.0		: Ajout de la fonctionnalité d'ajout des notes.
+ - 1.2.1.0		: Ajout d'un bouton pour accéder à la fonctionnalité des notes.
 \*********************/
 
 var getTextNodesIn = function(el) {
@@ -251,6 +252,9 @@ var Notes = {
 
 		$("body").prepend("<style>" + css + "</style>");
 	},
+	InsertNoteButtons: function() {
+		$("div.espionListe > fieldset.espionColonne2Liste > table > tbody > tr:not([id]) > td > div").prepend("<span class='tttshownote'>[*]</span>");
+	},
 	SaveNote : function(playerName, noteContent) {
 		GM_SuperValue.set("note:" + playerName, noteContent); 
 	},
@@ -259,7 +263,7 @@ var Notes = {
 	},
 	AddEventsHandler : function() {
 		var self = this;
-		$("div.espionListe > fieldset.espionColonne2Liste > table > tbody > tr:not([id]) > td > div").mouseup(
+		/*$("div.espionListe > fieldset.espionColonne2Liste > table > tbody > tr:not([id]) > td > div").mouseup(
 			function(e) {
 				// Clic molette pour ouvrir la fenêtre.
 				if(e.which === 2) {
@@ -273,6 +277,19 @@ var Notes = {
 					return false;
 				}
 			}
+		);*/
+
+		$("div.espionListe > fieldset.espionColonne2Liste > table > tbody > tr:not([id]) > td > div > span.tttshownote").click(
+			function(e) {
+				// Clic molette pour ouvrir la fenêtre.
+				self.EditingPlayerName = $(this).parents("tr").attr("data-playername");
+				self.InputEl.css("top", e.pageY+5);
+				self.InputEl.css("left", e.pageX+5);
+				self.InputEl.removeClass("ttthidden");
+				var txtInput = self.InputEl.children()[0];
+				txtInput.text = self.GetNote(self.EditingPlayerName);
+				return false;
+			}
 		);
 
 		self.InputEl.children().last().click(function(e) {
@@ -285,6 +302,7 @@ var Notes = {
 	Init : function() {
         var self=this;
         self.InsertCss();
+        self.InsertNoteButtons();
 		$("body").prepend(self.InputEl);
 		self.AddEventsHandler();
 	}
