@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.2.1.4
+// @version     1.2.1.5
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @grant       GM_log
@@ -283,7 +283,7 @@ var Notes = {
 				self.InputEl.css("left", e.pageX+5);
 				self.InputEl.removeClass("ttthidden");
 				var txtInput = self.InputEl.children()[0];
-				txtInput.text = self.GetNote(self.EditingPlayerName);
+				txtInput.value = self.GetNote(self.EditingPlayerName);
 				e.preventDefault();
 				return false;
 			}
