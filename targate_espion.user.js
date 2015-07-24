@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.2.2.3
+// @version     1.2.2.4
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @grant       GM_log
@@ -13,10 +13,26 @@
 // ==/UserScript==
 WP_DEBUG = true;
 
+
+/***** CHANGELOG *****\
+ - 1.2.2.4		: Affichage du nombre de VAB nécessaires pour piller les ressources du joueur (en prenant en compte les 10% du commandeur).
+ - 1.2.2.0		: Ajout de la couleur rouge sur le lien pour les notes quand cette dernière n'est pas vide.
+ - 1.2.1.0		: Ajout d'un bouton pour accéder à la fonctionnalité des notes.
+ - 1.2.0.0		: Ajout de la fonctionnalité d'ajout/consultation des notes pour les joueurs du centre d'espionnage.
+ - 1.1.2.6		: Ajustements.
+ - 1.1.2.0		: Correction des events handlers sur les boutons bleus.
+ - 1.1.1.3		: Complétion et correction de valeurs dans les tableaux des entrepôts.
+ - 1.1.1.1		: Problème dans la détection des alliances corrigé.
+ - 1.1.1		: Détection des alliances.
+ - 1.1			: Réorganisation du tableau de joueurs.
+\*********************/
+
 /***** BUGS *****\
 \****************/
 
 /***** TODO *****\
+ - La textarea des notes est mal dimensionnée.
+ - Réarchitecturer le module d'espionnage.
  - Option ASC/DESC pour le classement des joueurs.
  - Ajouter le nombre de VAB nécessaires pour le pillage.
  - Régler les ressources des entrepôts.
@@ -24,17 +40,6 @@ WP_DEBUG = true;
  - Bouton permettant d'effacer toutes les notes.
 \****************/
 
-/***** CHANGELOG *****\
- - 1.1			: Réorganisation du tableau de joueurs.
- - 1.1.1		: Détection des alliances.
- - 1.1.1.1		: Problème dans la détection des alliances corrigé.
- - 1.1.1.3		: Complétion et correction de valeurs dans les tableaux des entrepôts.
- - 1.1.2.0		: Correction des events handlers sur les boutons bleus.
- - 1.1.2.6		: Ajustements.
- - 1.2.0.0		: Ajout de la fonctionnalité d'ajout/consultation des notes pour les joueurs du centre d'espionnage.
- - 1.2.1.0		: Ajout d'un bouton pour accéder à la fonctionnalité des notes.
- - 1.2.2.0		: Ajout de la couleur rouge sur le lien pour les notes quand cette dernière n'est pas vide.
-\*********************/
 
 var getTextNodesIn = function(el) {
     return $(el).find(":not(iframe)").addBack().contents().filter(function() {
@@ -207,9 +212,11 @@ var initPanel = function() {
 
             var nbCarg = Math.ceil(pillTot / 40000);
             var nbRavi = Math.ceil(pillTot / 20000);
+            var nbVAB = Math.ceil(pillTot / (3000 + 300)); // +300 pour simuler les 10% qu'ajoutent le commandeur.
 
             var app = 	"<br/>" + "<div style='color:red;'>" +
                 "Pillage : "  + pillTot + "<br/>" + 
+                "VAB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: " + nbVAB + "<br/>" +
                 "Ravitailleurs&nbsp;: " + nbRavi + "<br/>" +
                 "Cargos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: " + nbCarg + "<br/>" + "</div>";
             rapportRsrc.append(app);
@@ -256,7 +263,7 @@ var Notes = {
 				"display:inline;" +
 			"}" +
 			".tttshownote {" +
-				"color: blue;" +
+				"color: cyan;" +
 			"}" +
 			".tttnotepresente {" +
 				"color: red;" +
@@ -271,12 +278,6 @@ var Notes = {
 
 		// On affiche les divs contenant le nom des joueurs en inline, sinon ils apparaissent à la ligne après le bouton.
 		$("div.espionListe > fieldset.espionColonne2Liste > table > tbody > tr:not([id]) > td > div").addClass('tttinline');
-
-		//TODO: A ce moment, les noms des joueurs ne sont pas encore chargés.
-		/*/ Ajout de la couleur rouge si une note est définie.
-		$("div.espionListe > fieldset.espionColonne2Liste > table > tbody > tr:not([id]) > td > a").each(function() {
-			if(self.GetNote($(this).parents("tr").attr("data-playername")) !== '') $(this).addClass("tttnotepresente");
-		});*/
 	},
 	SaveNote : function(playerName, noteContent) {
 		GM_SuperValue.set("note:" + playerName, noteContent); 
