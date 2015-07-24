@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.2.2.2
+// @version     1.2.2.3
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @grant       GM_log
@@ -63,6 +63,7 @@ var valeurCle = function(txtObj) {
 	return parseInt(txt.substr(txt.indexOf(":")+1, txt.length).replace(/\./g, ''));
 };
 
+var ongetallplayers = null;
 var GetAllPlayers = function(callback, error) {
     // Requête sur la page des bâtiments.
     var xhr = new XMLHttpRequest();
@@ -94,6 +95,7 @@ var GetAllPlayers = function(callback, error) {
 			});
 	        // Appel du callback de bâtiment trouvé.
 	        if(callback!==null) callback(players);
+	        if(ongetallplayers!==null) ongetallplayers(players);
         }
     }; 
     xhr.send();//params); 
@@ -322,9 +324,11 @@ var Notes = {
 		self.AddEventsHandler();
 
 		// En espérant que les noms de joueurs soient chargés à ce moment.
-		$("div.espionListe > fieldset.espionColonne2Liste > table > tbody > tr:not([id]) > td > a").each(function() {
-			if(self.GetNote($(this).parents("tr").attr("data-playername")) !== '') $(this).addClass("tttnotepresente");
-		});
+		ongetallplayers = function() {
+			$("div.espionListe > fieldset.espionColonne2Liste > table > tbody > tr:not([id]) > td > a").each(function() {
+				if(self.GetNote($(this).parents("tr").attr("data-playername")) !== '') $(this).addClass("tttnotepresente");
+			});
+		};
 	}
 };
 
