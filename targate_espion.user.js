@@ -229,8 +229,8 @@ $(".coloraqua").click(function() {
 // Module de gestion des notes sur les joueurs.
 var Notes = {
 	InputEl : $("<div id='tttdivinput' class='ttthidden'>" +
-					"<input type='text' id='tttnoteinput'/></td>" +
-					"<button content='OK' id='tttnoteok'/>" +
+					"<textarea id='tttnoteinput'></textarea>" +
+					"<button id='tttnoteok'>OK</button>" +
 				"</div>"),
 	EditingPlayerName : "",
 	InsertCss : function() {
@@ -273,7 +273,7 @@ var Notes = {
 					self.InputEl.css("left", e.pageX+5);
 					self.InputEl.removeClass("ttthidden");
 					var txtInput = self.InputEl.children()[0];
-					txtInput.text = self.GetNote(self.EditingPlayerName);
+					txtInput.value = self.GetNote(self.EditingPlayerName);
 					return false;
 				}
 			}
@@ -295,7 +295,7 @@ var Notes = {
 		self.InputEl.children().last().click(function(e) {
 			self.InputEl.addClass("ttthidden");
 			if(self.EditingPlayerName.length > 0)
-				self.SaveNote(self.EditingPlayerName, self.InputEl.children().first().text());
+				self.SaveNote(self.EditingPlayerName, self.InputEl.children().first()[0].value);
 			self.EditingPlayerName = "";
 		});
 	},
