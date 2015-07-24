@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.2.1.1
+// @version     1.2.1.2
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @grant       GM_log
@@ -253,7 +253,7 @@ var Notes = {
 		$("body").prepend("<style>" + css + "</style>");
 	},
 	InsertNoteButtons: function() {
-		$("div.espionListe > fieldset.espionColonne2Liste > table > tbody > tr:not([id]) > td").prepend("<span class='tttshownote'>[*]</span>");
+		$("div.espionListe > fieldset.espionColonne2Liste > table > tbody > tr:not([id]) > td").prepend("<a class='tttshownote'>[*]</a>");
 	},
 	SaveNote : function(playerName, noteContent) {
 		GM_SuperValue.set("note:" + playerName, noteContent); 
@@ -279,7 +279,7 @@ var Notes = {
 			}
 		);*/
 
-		$("div.espionListe > fieldset.espionColonne2Liste > table > tbody > tr:not([id]) > td > div > span.tttshownote").click(
+		$("div.espionListe > fieldset.espionColonne2Liste > table > tbody > tr:not([id]) > td > a.tttshownote").click(
 			function(e) {
 				// Clic molette pour ouvrir la fenêtre.
 				self.EditingPlayerName = $(this).parents("tr").attr("data-playername");
@@ -288,6 +288,7 @@ var Notes = {
 				self.InputEl.removeClass("ttthidden");
 				var txtInput = self.InputEl.children()[0];
 				txtInput.text = self.GetNote(self.EditingPlayerName);
+				e.preventDefault();
 				return false;
 			}
 		);
