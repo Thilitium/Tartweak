@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.2.2.0
+// @version     1.2.2.1
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @grant       GM_log
@@ -265,7 +265,7 @@ var Notes = {
 	InsertNoteButtons: function() {
 		var self = this;
 
-		$("div.espionListe > fieldset.espionColonne2Liste > table > tbody > tr:not([id]) > td").prepend("<a class='tttshownote'>[*]&nbspb;</a>");
+		$("div.espionListe > fieldset.espionColonne2Liste > table > tbody > tr:not([id]) > td").prepend("<a class='tttshownote'>[*]&nbsp;</a>");
 
 		// On affiche les divs contenant le nom des joueurs en inline, sinon ils apparaissent à la ligne après le bouton.
 		$("div.espionListe > fieldset.espionColonne2Liste > table > tbody > tr:not([id]) > td > div").addClass('tttinline');
@@ -304,9 +304,11 @@ var Notes = {
 			var elA = self.$EditingPlayerTd.children("a");
 			self.InputEl.addClass("ttthidden");
 			if(self.EditingPlayerName.length > 0) {
-				self.SaveNote(self.EditingPlayerName, self.InputEl.children().first()[0].value);
-				elA.addClass("tttnotepresente");
-			} else elA.removeClass("tttnotepresente");
+				var note = self.InputEl.children().first()[0].value;
+				self.SaveNote(self.EditingPlayerName, note);
+				if (note !== '') elA.addClass("tttnotepresente");
+				else elA.removeClass("tttnotepresente");
+			} 
 			self.EditingPlayerName = "";
 			self.$EditingPlayerTd = null;
 		});
