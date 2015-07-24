@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.2.1.2
+// @version     1.2.1.3
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @grant       GM_log
@@ -23,6 +23,7 @@ WP_DEBUG = true;
  - Afficher le résultat de la simulation de combat dans la page, si demandé par l'utilisateur (spatial ou terrestre).
  - Possibilité d'ajouter/consulter des notes concernant les utilisateurs (planètes ?) directement depuis le centre d'espionnage.
      + Trier les joueurs avec des notes ?
+ - Afficher une couleur rouge sur le bouton de la note utilisateur s'il en a déjà une.
 \****************/
 
 /***** CHANGELOG *****\
@@ -248,36 +249,31 @@ var Notes = {
 			"}" +
 			".ttthidden {" +
 				"display:none;" +
+			"}" + 
+			".tttinline {" +
+				"display:inline;" +
+			"}" +
+			".tttnotepresente {" +
+				"color: red;" +
 			"}";
 
 		$("body").prepend("<style>" + css + "</style>");
 	},
 	InsertNoteButtons: function() {
 		$("div.espionListe > fieldset.espionColonne2Liste > table > tbody > tr:not([id]) > td").prepend("<a class='tttshownote'>[*]</a>");
+
+		// On affiche les divs contenant le nom des joueurs en inline, sinon ils apparaissent à la ligne après le bouton.
+		$("div.espionListe > fieldset.espionColonne2Liste > table > tbody > tr:not([id]) > td > div").addClass('tttinline');
 	},
 	SaveNote : function(playerName, noteContent) {
 		GM_SuperValue.set("note:" + playerName, noteContent); 
 	},
 	GetNote : function(playerName) {
-		return GM_SuperValue.get("note:" + playerName);
+		var value = GM_SuperValue.get("note:" + playerName);
+		return (value!=='undefined') ? value:'';
 	},
 	AddEventsHandler : function() {
 		var self = this;
-		/*$("div.espionListe > fieldset.espionColonne2Liste > table > tbody > tr:not([id]) > td > div").mouseup(
-			function(e) {
-				// Clic molette pour ouvrir la fenêtre.
-				if(e.which === 2) {
-					e.preventDefault();
-					self.EditingPlayerName = $(this).parents("tr").attr("data-playername");
-					self.InputEl.css("top", e.pageY+5);
-					self.InputEl.css("left", e.pageX+5);
-					self.InputEl.removeClass("ttthidden");
-					var txtInput = self.InputEl.children()[0];
-					txtInput.value = self.GetNote(self.EditingPlayerName);
-					return false;
-				}
-			}
-		);*/
 
 		$("div.espionListe > fieldset.espionColonne2Liste > table > tbody > tr:not([id]) > td > a.tttshownote").click(
 			function(e) {
