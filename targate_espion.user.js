@@ -31,6 +31,7 @@ WP_DEBUG = true;
 \****************/
 
 /***** TODO *****\
+ - Afficher les points des joueurs en vert dégradé orange si attaquables, puis rouge quand points trop élevés ou trop faibles.
  - La textarea des notes est mal dimensionnée.
  - Réarchitecturer le module d'espionnage.
  - Option ASC/DESC pour le classement des joueurs.
