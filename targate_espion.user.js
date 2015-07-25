@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.2.3.8
+// @version     1.2.3.9
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @grant       GM_log
@@ -382,13 +382,13 @@ var Notes = {
 	},
 	Init : function() {
         var self=this;
-        self.InsertCss();
-        self.InsertNoteButtons();
-		$("body").prepend(self.InputEl);
-		self.AddEventsHandler();
 
 		// En espérant que les noms de joueurs soient chargés à ce moment.
 		Network.ongetallplayers = function() {
+	        self.InsertCss();
+	        self.InsertNoteButtons();
+			$("body").prepend(self.InputEl);
+			self.AddEventsHandler();
 			$("div.espionListe > fieldset.espionColonne2Liste > table > tbody > tr:not([id]) > td > a").each(function() {
 				if(self.GetNote($(this).parents("tr").attr("data-playername")) !== '') $(this).addClass("tttnotepresente");
 			});
