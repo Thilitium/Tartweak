@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.2.3
+// @version     1.2.3.1
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @grant       GM_log
@@ -55,7 +55,7 @@ var getTextNodesIn = function(el) {
 };
 
 //TODO: Vérifier la valeur pour un entrepôt niveau 3 (ce ne doit pas etre 540k je pense)
-var maxRes = [100000, 170000, 380000, 540000, 1290000, 2340000, 4860000, 843 0000, 14450000, 24250000, 40420000, 66670000, 109020000, 177200000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+var maxRes = [100000, 170000, 380000, 540000, 1290000, 2340000, 4860000, 8430000, 14450000, 24250000, 40420000, 66670000, 109020000, 177200000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 //TODO: Récupérer les valeurs manquantes
 var maxTrit = [100000, 0, 0, 0, 1430000, 2340000, 4510000, 7660000, 12980000, 21520000, 35380000, 0, 92850000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
@@ -233,7 +233,7 @@ var Espionnage = {
 		var txt = txtObj.textContent;
 		return parseInt(txt.substr(txt.indexOf(":")+1, txt.length).replace(/\./g, ''));
 	},
-	_initPanel = function() {
+	_initPanel : function() {
 		// Initialisation des améliorations du panneau de droite.
 	    var rapportRsrc = $("fieldset.espionMoyenrapport:nth-child(2) > div:nth-child(3)");
 	    var rapportBats = $("fieldset.espionGrandrapport").first();
@@ -285,7 +285,7 @@ var Espionnage = {
 	        }
 	    }
 	},
-	Init = function(){
+	Init : function(){
 		// Ajout de la gestion du clic.
 		$(".coloraqua").click(function() {
 		    setTimeout(function() {
