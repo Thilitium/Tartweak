@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.2.3.2
+// @version     1.2.3.3
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @grant       GM_log
@@ -154,15 +154,14 @@ var UI = {
 		var self=this;
 		// Ajout des points des joueurs.
 		Network.GetAllPlayers(function(players) {
-			var i;
 			var maxPts = null;
 			var minPts = null;
 			var maxSpan = null;
 
 			// Récuépration des points des joueurs sous forme de nombre.
 			// Récupération des points du joueur utilisant le script.
-			for (i=0; i<players.length; ++i) {
-				players[i].intPoints = ((players[i].points.length <= 0)?"0":players[i].points.replace(/\./g, ""));
+			for (var i=0; i<players.length; ++i) {
+				players[i].intPoints = parseInt(((players[i].points.length <= 0)?"0":players[i].points.replace(/\./g, "")));
 				if (players[i].isMyself) myPoints = players[i].intPoints;
 
 				if (maxPts === null || maxPts < players[i].intPoints) maxPts = players[i].intPoints;
@@ -171,7 +170,7 @@ var UI = {
 
 			maxSpan = maxPts - myPoints;
 			$("div.espionListe > fieldset.espionColonne2Liste > table > tbody > tr:not([id]) > td > div").each(function() {
-				for (i=0; i<players.length; ++i) {
+				for (var i=0; i<players.length; ++i) {
 					if (players[i].processed !== undefined) {
 						var elPlayerName = $(this).text();
 						var iParentese = elPlayerName.indexOf("(") - 1;
