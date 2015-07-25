@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.2.3.6
+// @version     1.2.3.7
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @grant       GM_log
@@ -286,10 +286,11 @@ var Espionnage = {
 	    }
 	},
 	Init : function(){
+		var self=this;
 		// Ajout de la gestion du clic.
 		$(".coloraqua").click(function() {
 		    setTimeout(function() {
-		    	this._initPanel();
+		    	self._initPanel();
 		    }, 700);
 		});
 	}
