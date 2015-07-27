@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.2.3.9
+// @version     1.2.4
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @grant       GM_log
@@ -16,6 +16,7 @@ var myPseudo = null;
 var myPoints = null;
 
 /***** CHANGELOG *****\
+ - 1.2.4		: Correction des bugs induits par la factorisation. Correction des couleurs.
  - 1.2.3		: 
  	+ Optimisations majeures.
  	+ Factorisation du code.
@@ -34,6 +35,7 @@ var myPoints = null;
 \*********************/
 
 /***** BUGS *****\
+ - Le calcul des couleurs ne marche pas si on est premier (division par 0).
 \****************/
 
 /***** TODO *****\
@@ -186,12 +188,12 @@ var UI = {
 							var r, g, b;
 							var pct;
 							if (players[i].intPoints > myPoints) {
-								pct = ((players[i].intPoints - myPoints) / maxPts);
+								pct = myPoints / players[i].intPoints;
 								r = parseInt(50 + (pct * 205));
 								v = parseInt(255 - (pct * 255));
 								b = 0;
 							} else if(players[i].intPoints <= myPoints) {
-								pct = ((myPoints - minPts) / (players[i].intPoints - minPts + 0.001));
+								pct = 1 - ((players[i].intPoints - mypoints) / (maxPts - myPoints));
 								r = parseInt(255 - (pct * 205));
 								v = (50 + (pct * 205));
 								b = 0;
