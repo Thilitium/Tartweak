@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.2.4.5
+// @version     1.2.4.6
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @grant       GM_log
@@ -188,25 +188,27 @@ var UI = {
 							var r, g, b;
 							var pct;
 							if (players[i].intPoints > myPoints) {
-								pct = (players[i].intPoints - myPoints) / maxSpan;
 								//pct = 1 - (myPoints / players[i].intPoints);
+								//pct = (players[i].intPoints - myPoints) / maxSpan;
+								pct = -maxSpan / -(players[i].intPoints - myPoints);
 								r = parseInt(50 + (pct * 205));
 								g = parseInt(255 - (pct * 255));
 								b = 0;
 							} else if(players[i].intPoints <= myPoints) {
-								pct = players[i].intPoints / myPoints;
 								//pct = 1 - ((players[i].intPoints - myPoints) / maxSpan);
+								pct = players[i].intPoints / myPoints;
 								r = parseInt(255 - (pct * 205));
 								g = parseInt(50 + (pct * 205));
 								b = 0;
 							}
 							this.innerHTML = 
 								"|&nbsp;" + 
-									players[i].points + 
+									"<span style='color:rgb(" + r + "," + g + "," + b + ");'>" +
+										players[i].points + 
+									"</span>" +
 								"&nbsp;|&nbsp;" + 
-								"<span style='color:rgb(" + r + "," + g + "," + b + ");'>" + 
-									this.innerHTML + 
-								"</span>";
+								this.innerHTML;
+
 							$(this).parents("tr")[0].setAttribute('data-playername', players[i].name);
 							$(this).parents("tr")[0].setAttribute('data-playerpoints', ((players[i].points.length <= 0)?"0":players[i].points.replace(/\./g, "")));
 							players[i].processed = true;
