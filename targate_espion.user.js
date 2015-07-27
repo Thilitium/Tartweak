@@ -37,14 +37,17 @@ var myPoints = null;
 \****************/
 
 /***** TODO *****\
- - Afficher les points des joueurs en vert dégradé orange si attaquables, puis rouge quand points trop élevés ou trop faibles.
- - La textarea des notes est mal dimensionnée.
- - Réarchitecturer le module d'espionnage.
- - Option ASC/DESC pour le classement des joueurs.
- - Ajouter le nombre de VAB nécessaires pour le pillage.
- - Régler les ressources des entrepôts.
- - Afficher le résultat de la simulation de combat dans la page, si demandé par l'utilisateur (spatial ou terrestre).
- - Bouton permettant d'effacer toutes les notes.
+ + ESPIONNAGE :
+ 	- Afficher les points des joueurs en vert dégradé orange si attaquables, puis rouge quand points trop élevés ou trop faibles.
+ 	- Option ASC/DESC pour le classement des joueurs.
+ 	- Régler les ressources des entrepôts.
+ + SIMULATION
+ 	- Afficher le résultat de la simulation de combat dans la page, si demandé par l'utilisateur (spatial ou terrestre).
+ + TECHNIQUE :
+ 	- Réarchitecturer le module d'espionnage.
+ + NOTES :
+ 	- Bouton permettant d'effacer toutes les notes.
+ 	- La textarea des notes est mal dimensionnée.
 \****************/
 
 
