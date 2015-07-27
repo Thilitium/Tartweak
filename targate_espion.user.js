@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.2.4.4
+// @version     1.2.4.5
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @grant       GM_log
@@ -197,7 +197,7 @@ var UI = {
 								pct = players[i].intPoints / myPoints;
 								//pct = 1 - ((players[i].intPoints - myPoints) / maxSpan);
 								r = parseInt(255 - (pct * 205));
-								g = (50 + (pct * 205));
+								g = parseInt(50 + (pct * 205));
 								b = 0;
 							}
 							this.innerHTML = 
