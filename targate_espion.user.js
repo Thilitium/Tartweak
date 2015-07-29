@@ -40,7 +40,8 @@ var myPoints = null;
 
 /***** TODO *****\
  + ESPIONNAGE :
- 	- Afficher les points des joueurs en vert dégradé orange si attaquables, puis rouge quand points trop élevés ou trop faibles.
+ 	- Trier les ([TAR])
+ 	- Adapter les couleurs pour refléter les joueurs en dessous de 50% de son propre score et au dessus de 50%.
  	- Option ASC/DESC pour le classement des joueurs.
  	- Régler les ressources des entrepôts.
  + SIMULATION
