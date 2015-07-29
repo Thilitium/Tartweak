@@ -8,7 +8,7 @@
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @require		https://raw.githubusercontent.com/nnnick/Chart.js/master/Chart.min.js
-// @require		http://momentjs.com/downloads/moment.js
+// @require		https://raw.githubusercontent.com/Thilitium/Tartweak/master/jquery.canvasjs.min.js
 // @grant       GM_log
 // @grant 		GM_setValue
 // @grant 		GM_getValue
