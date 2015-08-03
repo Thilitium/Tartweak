@@ -4,15 +4,20 @@
 // @include 	http://targate.fr/index.php?choix=classement*
 // @include     http://www.targate.fr/index.php?choix=classement*
 // @include     https://targate.fr/index.php?choix=classement*
-// @version     0.0.1.3
+// @version     0.0.1.4
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @require		https://raw.githubusercontent.com/nnnick/Chart.js/master/Chart.min.js
 // @require		https://raw.githubusercontent.com/Thilitium/Tartweak/master/jquery.canvasjs.min.js
+// @require		http://code.jquery.com/ui/1.11.4/jquery-ui.js
 // @grant       GM_log
 // @grant 		GM_setValue
 // @grant 		GM_getValue
 // ==/UserScript==
+// Inclusion du CSS jQueryUI
+$("body").prepend('<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">');
+
+
 WP_DEBUG = true;
 var myPseudo = null;
 var myPoints = null;
@@ -83,6 +88,9 @@ var UI = {
 
 		var options = {
 			title				: {text: "Points des joueurs en fonction du temps : "},
+			toolTip				: {content: "{x} <br/> {name}: {y}"},
+			axisX				: {valueFormatString: "DD/MM/YY"},
+			axisY				: {includeZero: false}, 
 			animationEnabled	: true,
 			data 				: data
 		};
@@ -107,6 +115,7 @@ var style = $(
 	"</style>"
 );
 var divContain = $("<div class='tttdivgraph'/>");
+divContain.draggable().resizable();
 $body.prepend(style);
 $body.prepend(divContain);
 Data.GetAllPlayers(
