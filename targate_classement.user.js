@@ -4,7 +4,7 @@
 // @include 	http://targate.fr/index.php?choix=classement*
 // @include     http://www.targate.fr/index.php?choix=classement*
 // @include     https://targate.fr/index.php?choix=classement*
-// @version     0.0.2.15
+// @version     0.0.2.16
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @require		https://raw.githubusercontent.com/nnnick/Chart.js/master/Chart.min.js
@@ -103,7 +103,7 @@ var UI = {
 		};
 
 		$container.CanvasJSChart(self._chartOptions);
-		$container.resize(function() { 
+		$container.on("resizestop", function() { 
 				self._chartOptions.animationEnabled = false;
 				++self._sizing;
 				setTimeout(function() {
@@ -129,7 +129,7 @@ divMaster.append(divContain);
 $body.prepend(divMaster);
 
 divMaster.draggable();
-divMaster.resizable();
+divMaster.resizable({delay: 150});
 
 Data.GetAllPlayers(
 	function(players) { 
