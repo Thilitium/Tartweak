@@ -4,7 +4,7 @@
 // @include 	http://targate.fr/index.php?choix=classement*
 // @include     http://www.targate.fr/index.php?choix=classement*
 // @include     https://targate.fr/index.php?choix=classement*
-// @version     0.0.2.0
+// @version     0.0.2.1
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @require		https://raw.githubusercontent.com/nnnick/Chart.js/master/Chart.min.js
@@ -73,7 +73,11 @@ var Metier = {
 };
 
 var UI = {
+	_chartOptions : null,
+	_canUpdate: true,
 	CreerChart : function(container, players) {
+		var self = this;
+		var $container = $(container);
 		var data = [];
 		for(var i=0; i<players.length; ++i) {
 			var score = GM_SuperValue.get("score:" + players[i].name);
@@ -87,7 +91,7 @@ var UI = {
 			});
 		}
 
-		var options = {
+		self._chartOptions = {
 			title				: {text: "Points des joueurs en fonction du temps : "},
 			toolTip				: {content: "{x} <br/> {name}: {y}"},
 			axisX				: {valueFormatString: "DD/MM/YY"},
@@ -96,7 +100,17 @@ var UI = {
 			data 				: data
 		};
 
-		$(container).CanvasJSChart(options);
+		$container.CanvasJSChart(self._chartOptions);
+		$container.resize(function() { 
+			if(self._canUpdate) {
+				self._canUpdate = false;
+				$(this).CanvasJSChart(self._chartOptions); 
+				setTimeout(function() {
+					self._canUpdate = true,
+				}, 1000);
+			}
+		});
+
 	}
 };
 
