@@ -4,7 +4,7 @@
 // @include 	http://targate.fr/index.php?choix=classement*
 // @include     http://www.targate.fr/index.php?choix=classement*
 // @include     https://targate.fr/index.php?choix=classement*
-// @version     0.0.1.0
+// @version     0.0.1.1
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @require		https://raw.githubusercontent.com/nnnick/Chart.js/master/Chart.min.js
@@ -71,7 +71,7 @@ var UI = {
 			var tScore = [];
 			for(var dateScore in score) tScore.push({x: dateScore, y: score[dateScore]});
 			data.push({
-				showInLegend: false,
+				//showInLegend: true,
 				name 		: players[i].name,
 				type		: "spline",
 				dataPoints	: tScore
