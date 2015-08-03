@@ -4,7 +4,7 @@
 // @include 	http://targate.fr/index.php?choix=classement*
 // @include     http://www.targate.fr/index.php?choix=classement*
 // @include     https://targate.fr/index.php?choix=classement*
-// @version     0.0.2.6
+// @version     0.0.2.7
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @require		https://raw.githubusercontent.com/nnnick/Chart.js/master/Chart.min.js
@@ -101,8 +101,7 @@ var UI = {
 		};
 
 		$container.CanvasJSChart(self._chartOptions);
-		$container.resizable();
-		$container.resize(function() { 
+		/*$container.resize(function() { 
 				self._chartOptions.animationEnabled = false;
 				++self._sizing;
 				setTimeout(function() {
@@ -111,7 +110,7 @@ var UI = {
 						$(this).CanvasJSChart(self._chartOptions); 
 						
 				}, 1000);
-		});
+		});*/
 
 	}
 };
@@ -131,10 +130,13 @@ var style = $(
 		"}" +
 	"</style>"
 );
-var divContain = $("<div class='tttdivgraph'/>");
-divContain.draggable();
+var divMaster = $("<div class='tttdivgraph'/>")
+var divContain = $("<div/>");
+divMaster.append(divContain);
+divMaster.draggable();
+divMaster.resizable();
 //$body.prepend(style);
-$body.prepend(divContain);
+$body.prepend(divMaster);
 Data.GetAllPlayers(
 	function(players) { 
 		Metier.StoreScores(players, 
