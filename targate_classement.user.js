@@ -4,7 +4,7 @@
 // @include 	http://targate.fr/index.php?choix=classement*
 // @include     http://www.targate.fr/index.php?choix=classement*
 // @include     https://targate.fr/index.php?choix=classement*
-// @version     0.0.2.13
+// @version     0.0.2.15
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @require		https://raw.githubusercontent.com/nnnick/Chart.js/master/Chart.min.js
@@ -74,7 +74,7 @@ var Metier = {
 
 var UI = {
 	_chartOptions : null,
-	_sizing: false,
+	_sizing: 0,
 	CreerChart : function(container, players) {
 		var self = this;
 		var $container = $(container);
@@ -103,16 +103,16 @@ var UI = {
 		};
 
 		$container.CanvasJSChart(self._chartOptions);
-		/*$container.resize(function() { 
+		$container.resize(function() { 
 				self._chartOptions.animationEnabled = false;
 				++self._sizing;
 				setTimeout(function() {
 					--self._sizing;
 					if(self._sizing==0)
-						$(this).CanvasJSChart(self._chartOptions); 
+						$(this).CanvasJSChart().render(); 
 						
 				}, 1000);
-		});*/
+		});
 
 	}
 };
@@ -122,10 +122,10 @@ var $body = $("body");
 
 // Récupération des joueurs et de leurs points.
 var players = [];
-var divMaster = $("<div class='tttdivgraph' style='position:absolute;z-index:999;'/>")
-//var divContain = $("<div/>");
+var divMaster = $("<div class='tttdivgraph' style='position:absolute;height:300px;width:500px;z-index:999;'/>")
+var divContain = $("<div/>");
 
-//divMaster.append(divContain);
+divMaster.append(divContain);
 $body.prepend(divMaster);
 
 divMaster.draggable();
@@ -135,7 +135,7 @@ Data.GetAllPlayers(
 	function(players) { 
 		Metier.StoreScores(players, 
 			function(players) {
-				UI.CreerChart(divMaster, players);
+				UI.CreerChart(divContain, players);
 			}
 		);
 	}
