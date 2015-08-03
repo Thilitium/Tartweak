@@ -4,7 +4,7 @@
 // @include 	http://targate.fr/index.php?choix=classement*
 // @include     http://www.targate.fr/index.php?choix=classement*
 // @include     https://targate.fr/index.php?choix=classement*
-// @version     0.0.1.2
+// @version     0.0.1.3
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @require		https://raw.githubusercontent.com/nnnick/Chart.js/master/Chart.min.js
@@ -72,7 +72,7 @@ var UI = {
 		for(var i=0; i<players.length; ++i) {
 			var score = GM_SuperValue.get("score:" + players[i].name);
 			var tScore = [];
-			for(var dateScore in score) tScore.push({x: dateScore, y: score[dateScore]});
+			for(var dateScore in score) tScore.push({x: new Date(dateScore), y: score[dateScore]});
 			data.push({
 				//showInLegend: true,
 				name 		: players[i].name,
