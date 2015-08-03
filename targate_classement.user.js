@@ -4,7 +4,7 @@
 // @include 	http://targate.fr/index.php?choix=classement*
 // @include     http://www.targate.fr/index.php?choix=classement*
 // @include     https://targate.fr/index.php?choix=classement*
-// @version     0.0.2.18
+// @version     1.0.0.0
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @require		https://raw.githubusercontent.com/nnnick/Chart.js/master/Chart.min.js
@@ -21,12 +21,15 @@ $("body").prepend('<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4
 WP_DEBUG = true;
 var myPseudo = null;
 var myPoints = null;
+var keyScore = "";
 
-// Todo
-
+/* Todo
+ - Implémentation du graphique pour tous les types de score.
+*/
 // Bugs
 
 // Changelog
+// 1.0.0.0		: Plug-in fonctionnel pour les scores de type "général" uniquement.
 // 0.0.2.0		: Fenêtre déplaçable / redimensionnable.
 // 0.0.1.2		: Débogage du code de récupération des données.
 
@@ -56,15 +59,15 @@ var Metier = {
 		var keyNote;
 
 		for(var i=0; i<players.length; ++i) {
-			var logPoints = GM_SuperValue.get("score:" + players[i].name);
+			var logPoints = GM_SuperValue.get(keyScore + players[i].name);
 			if(logPoints===undefined) logPoints = {};
 			if(logPoints["Invalid date"]!==undefined) {
 				delete logPoints["Invalid date"];
-				GM_SuperValue.set("score:" + players[i].name, logPoints);
+				GM_SuperValue.set(keyScore + players[i].name, logPoints);
 			}
 			if(logPoints[curDate]===undefined) {
 				logPoints[curDate] = players[i].intPoints;
-				GM_SuperValue.set("score:" + players[i].name, logPoints);
+				GM_SuperValue.set(keyScore + players[i].name, logPoints);
 			}
 		}
 
@@ -80,7 +83,7 @@ var UI = {
 		var $container = $(container);
 		var data = [];
 		for(var i=0; i<players.length; ++i) {
-			var score = GM_SuperValue.get("score:" + players[i].name);
+			var score = GM_SuperValue.get(keyScore + players[i].name);
 			var tScore = [];
 			for(var dateScore in score) tScore.push({x: new Date(dateScore), y: score[dateScore]});
 			data.push({
@@ -125,26 +128,34 @@ var players = [];
 var divMaster = $("<div class='tttdivgraph' style='position:absolute;height:300px;width:500px;z-index:999;'/>")
 var divContain = $("<div style='height:100%;width:100%;' />");
 
-divMaster.append(divContain);
-$body.prepend(divMaster);
+var Init = function() {
 
-divMaster.draggable();
-divMaster.resizable({
-	delay: 150,
-	stop: function(event, ui) {
-		chart = divContain.CanvasJSChart();
-		chart.options.width = divContain.width();
-		chart.options.height divContain.height();
-		chart.render();
-	}
-});
+	// On vérifie sur quelle page de classement on se trouve
+	var menu = $("#menuplanete5").val();
+	if (menu==='general') {
+		keyScore="score:";
+		divMaster.append(divContain);
+		$body.prepend(divMaster);
 
-Data.GetAllPlayers(
-	function(players) { 
-		Metier.StoreScores(players, 
-			function(players) {
-				UI.CreerChart(divContain, players);
+		divMaster.draggable();
+		divMaster.resizable({
+			delay: 150,
+			stop: function(event, ui) {
+				chart = divContain.CanvasJSChart();
+				chart.options.width = divContain.width();
+				chart.options.height = divContain.height();
+				chart.render();
+			}
+		});
+
+		Data.GetAllPlayers(
+			function(players) { 
+				Metier.StoreScores(players, 
+					function(players) {
+						UI.CreerChart(divContain, players);
+					}
+				);
 			}
 		);
 	}
-);
+}
