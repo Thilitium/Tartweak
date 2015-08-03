@@ -4,7 +4,7 @@
 // @include 	http://targate.fr/index.php?choix=classement*
 // @include     http://www.targate.fr/index.php?choix=classement*
 // @include     https://targate.fr/index.php?choix=classement*
-// @version     0.0.1.4
+// @version     0.0.2.0
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @require		https://raw.githubusercontent.com/nnnick/Chart.js/master/Chart.min.js
@@ -27,6 +27,7 @@ var myPoints = null;
 // Bugs
 
 // Changelog
+// 0.0.2.0		: Fenêtre déplaçable / redimensionnable.
 // 0.0.1.2		: Débogage du code de récupération des données.
 
 var Data = {
@@ -115,7 +116,6 @@ var style = $(
 	"</style>"
 );
 var divContain = $("<div class='tttdivgraph'/>");
-divContain.draggable().resizable();
 $body.prepend(style);
 $body.prepend(divContain);
 Data.GetAllPlayers(
@@ -123,6 +123,8 @@ Data.GetAllPlayers(
 		Metier.StoreScores(players, 
 			function(players) {
 				UI.CreerChart(divContain, players);
+				divContain.draggable();
+				divContain.resizable();
 			}
 		);
 	}
