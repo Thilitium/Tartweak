@@ -4,7 +4,7 @@
 // @include 	http://targate.fr/index.php?choix=classement*
 // @include     http://www.targate.fr/index.php?choix=classement*
 // @include     https://targate.fr/index.php?choix=classement*
-// @version     1.1.0.3
+// @version     1.1.1.0
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @require		https://raw.githubusercontent.com/nnnick/Chart.js/master/Chart.min.js
@@ -25,10 +25,12 @@ var keyScore = "";
 
 /* Todo
  - Implémentation du graphique pour tous les types de score.
+ - Ajout d'un filtre sur les dates.
 */
 // Bugs
 
 // Changelog
+// 1.1.1.0		: Debogages.
 // 1.1.0.0		: Ajout du filtre sur les joueurs dans la tranche attaquable à partir d'un clic sur série.
 // 1.0.0.0		: Plug-in fonctionnel pour les scores de type "général" uniquement.
 // 0.0.2.0		: Fenêtre déplaçable / redimensionnable.
@@ -88,7 +90,7 @@ var UI = {
 		var self = this;
 		var min, max;
 		if(self._chart===null) return false;
-		self._showAllPlayers = !_self._showAllPlayers;
+		self._showAllPlayers = !self._showAllPlayers;
 		for(var i=0; i<self._chart.options.data.length; ++i) {
 			if(self._showAllPlayers) {
 				self._chart.options.data[i].visible = true;
