@@ -4,7 +4,7 @@
 // @include 	http://targate.fr/index.php?choix=classement*
 // @include     http://www.targate.fr/index.php?choix=classement*
 // @include     https://targate.fr/index.php?choix=classement*
-// @version     1.0.0.1
+// @version     1.1.0.0
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @require		https://raw.githubusercontent.com/nnnick/Chart.js/master/Chart.min.js
@@ -29,6 +29,7 @@ var keyScore = "";
 // Bugs
 
 // Changelog
+// 1.1.0.0		: Ajout du filtre sur les joueurs dans la tranche attaquable à partir d'un clic sur série.
 // 1.0.0.0		: Plug-in fonctionnel pour les scores de type "général" uniquement.
 // 0.0.2.0		: Fenêtre déplaçable / redimensionnable.
 // 0.0.1.2		: Débogage du code de récupération des données.
@@ -45,7 +46,10 @@ var Data = {
 				intPoints 		: parseInt(((txtPoints.length <= 0)?"0":txtPoints.replace(/\./g, ""))),
 				isMyself		: ($this.attr("style") === "color:red;")
 			};
-			if (player.isMyself) myPseudo = player.name;
+			if (player.isMyself) {
+				myPseudo = player.name;
+				myPoints = player.intPoints;
+			}
 			players.push(player);
 		});
 		if(callback !== undefined) callback(players);
@@ -76,21 +80,53 @@ var Metier = {
 };
 
 var UI = {
-	_chartOptions : null,
-	_sizing: 0,
-	CreerChart : function(container, players) {
+	_chart 				: null,
+	_chartOptions 		: null,
+	_sizing 			: 0,
+	_showAllPlayers 	: true,
+	_toggleMinMaxUsers 	: function() {
+		var self = this;
+		var min, max;
+		if(self._chart===null) return false;
+		self._showAllPlayers = !_self._showAllPlayers;
+		for(var i=0; i<self._chart.options.data.length; ++i) {
+			if(self._showAllPlayers) {
+				self._chart.options.data[i].visible = true;
+			} else {
+				min = self._chart.options.data[i].minY;
+				max = self._chart.options.data[i].maxY;
+
+				if (min<myPoints && max>myPoints)
+					self._chart.options.data[i].visible = true;
+				else if(min<myPoints && max<myPoints)
+					self._chart.options.data[i].visible = ((max / myPoints) > 0.5);
+				else if(min>myPoints && max>myPoints)
+					self._chart.options.data[i].visible = ((myPoints/max) > 0.5);
+			}
+		}
+	},
+	CreerChart  		: function(container, players) {
 		var self = this;
 		var $container = $(container);
 		var data = [];
 		for(var i=0; i<players.length; ++i) {
 			var score = GM_SuperValue.get(keyScore + players[i].name);
 			var tScore = [];
-			for(var dateScore in score) tScore.push({x: new Date(dateScore), y: score[dateScore]});
+			var min = 9999999999; var max=0;
+			for(var dateScore in score) {
+				if(min>score[dateScore]) min=score[dateScore];
+				if(max<score[dateScore]) max=score[dateScore];
+				tScore.push({x: new Date(dateScore), y: score[dateScore]});
+			}
 			data.push({
 				//showInLegend: true,
 				name 		: players[i].name,
 				type		: "spline",
-				dataPoints	: tScore
+				dataPoints	: tScore,
+				visible		: true,
+				minY		: min,
+				maxY		: max,
+				click		: self._toggleMinMaxUsers
 			});
 		}
 
@@ -106,6 +142,7 @@ var UI = {
 		};
 
 		$container.CanvasJSChart(self._chartOptions);
+		self._chart = $container.CanvasJSChart();
 	}
 };
 
