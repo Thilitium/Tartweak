@@ -1,4 +1,4 @@
-var SHOW_SPIED = true;
+var SHOW_SPIED = false;
 
 
 
@@ -51,7 +51,7 @@ for(var iP=0; iP<planetes.length; ++iP) {
 	var txtPoints = txtTt.substr(txtTt.indexOf("(") + 1, txtTt.indexOf(" points)") - txtTt.indexOf("(") - 1);
 	var intPoints = parseInt(txtPoints.split('.').join(""));	
 
-	if(!(SHOW_SPIED && alreadySpied)) {
+	if(!(!SHOW_SPIED && alreadySpied)) {
 		var objPlayer=null;
 		for(var j=0; j<joueurs.length; ++j) {
 			if(joueurs[j].nom===joueur){
