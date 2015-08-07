@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.2.4.9
+// @version     1.2.5.0
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @grant       GM_log
@@ -16,6 +16,7 @@ var myPseudo = null;
 var myPoints = null;
 
 /***** CHANGELOG *****\
+ - 1.2.5		: La nourriture n'est plus prise en compte dans le calcul des ressources pillables spatiales.
  - 1.2.4		: Correction des bugs induits par la factorisation. Correction des couleurs.
  - 1.2.3		: 
  	+ Optimisations majeures.
@@ -279,15 +280,17 @@ var Espionnage = {
 	            var pillNour = this._pillagePour(nourriture, nivNo, false);
 	            var pillTrit = this._pillagePour(tritium, nivTr, true);
 	            var pillTot = pillOr + pillTit + pillTrit + pillNour;
+	            var pillTotSpatial = pillTot - pillNour;
 
-	            var nbCarg = Math.ceil(pillTot / 40000);
-	            var nbRavi = Math.ceil(pillTot / 20000);
+	            var nbCarg = Math.ceil(pillTotSpatial / 40000);
+	            var nbRavi = Math.ceil(pillTotSpatial / 20000);
 	            var nbVAB = Math.ceil(pillTot / (3000 + 300)); // +300 pour simuler les 10% qu'ajoute le commandeur.
 
 	            var app = 	
 	            	"<br/>" + 
 	            	"<div style='color:red;'>" +
-	                	"Pillage : "  + pillTot + "<br/>" + 
+	                	"Terestre : "  + pillTot + "<br/>" + 
+	                	"Spatial : " + pillTotSpatial + "<br/>" +
 	                	"VAB" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + ": " + nbVAB + "<br/>" +
 	                	"Ravitailleurs" + "&nbsp;" + ": " + nbRavi + "<br/>" +
 	                	"Cargos" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + ": " + nbCarg + "<br/>" + 

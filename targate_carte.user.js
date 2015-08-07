@@ -37,7 +37,7 @@ for(var iP=0; iP<planetes.length; ++iP) {
 	var txtTt = $tt.text();
 	//"Planète : Planète 6 (6:6:6)Occupant : Vertume (4.697.641 points)Alliance : Just For Fun"
 
-	var coord = txtTt.substr(txtTt.indexOf("(") + 1, txtTt.indexOf(")") - txtTt.indexOf("(") - 1).split(':');
+	var coord = txtTt.substr(txtTt.indexOf("(") + 1, txtTt.indexOf(")") - txtTt.indexOf("(") - 1);
 	//["6", "6", "6"]
 
 	// On tronque la chaîne pour obtenir l'occupant et les points.
@@ -64,7 +64,6 @@ for(var iP=0; iP<planetes.length; ++iP) {
 				nom: joueur,
 				txtPoints: txtPoints,
 				intPoints: intPoints,
-				spied: alreadySpied,
 				planetes : []
 			};
 			joueurs.push(objPlayer);
