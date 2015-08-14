@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.2.5.0
+// @version     1.2.5.1
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @grant       GM_log
@@ -16,6 +16,7 @@ var myPseudo = null;
 var myPoints = null;
 
 /***** CHANGELOG *****\
+ - 1.2.5.1 		: Ajout d'une valeur d'entrepôt supplémentaire.
  - 1.2.5		: La nourriture n'est plus prise en compte dans le calcul des ressources pillables spatiales.
  - 1.2.4		: Correction des bugs induits par la factorisation. Correction des couleurs.
  - 1.2.3		: 
