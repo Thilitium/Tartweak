@@ -4,7 +4,7 @@
 // @include 	http://targate.fr/*
 // @include     http://www.targate.fr/*
 // @include     https://targate.fr/*
-// @version     0.0.1
+// @version     0.0.2
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @grant       GM_log
 // ==/UserScript==
@@ -61,7 +61,7 @@ var Data = {
 
 		// Récupération des informations des planètes dans la carte.
 		for(var iP=0; iP<planetes.length; ++iP) {
-			var hasTritium = planetes.eq(iP).hasClass("planeteTritium");
+			hasTritium = planetes.eq(iP).hasClass("planeteTritium");
 			var intTritium = 0;
 			var txtTritium = "0";
 			var lienTritium = null;
@@ -126,7 +126,7 @@ var Data = {
 						planetes  	: []
 					};
 					joueurs.push(objPlayer);
-				};
+				}
 				objPlayer.planetes.push({
 					nom			: "",
 					coord 		: coord,
@@ -193,7 +193,7 @@ var UI = {
 
 		for(var iPlayer=0; iPlayer<players.length; ++iPlayer) {
 			curPlayer = players[iPlayer];
-			for(var iPlanete=0: iPlanete<curPlayer.planetes.length; ++iPlanete) {
+			for(var iPlanete=0; iPlanete<curPlayer.planetes.length; ++iPlanete) {
 				// Compilation du texte à afficher pour présenter la planète.
 				// Forme : Nom Planete <a href='collecter'> 100.000 Tritium </a>
 				txtPlanete = curPlanete;
@@ -215,7 +215,7 @@ var UI = {
 		// Application des gestionnaires d'évènements sur le clic du lien de récolte de tritium
 		for(iPlayer=0; iPlayer<players.length; ++iPlayer) {
 			curPlayer = players[iPlayer];
-			for(iPlanete=0; iPlanete<curPlayer.planetes.length; ++iPlanete) {
+			for(var iPlanete=0; iPlanete<curPlayer.planetes.length; ++iPlanete) {
 				curPlanete = curPlayer.planetes[iPlanete];
 				var xP = curPlanete.x;
 				var yP = curPlanete.y;
