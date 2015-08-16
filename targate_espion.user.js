@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.2.5.1
+// @version     1.2.5.2
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @grant       GM_log
@@ -16,6 +16,7 @@ var myPseudo = null;
 var myPoints = null;
 
 /***** CHANGELOG *****\
+ - 1.2.5.2 		: Ajout d'une valeur d'entrepôt supplémentaire. Correction du bug 01.
  - 1.2.5.1 		: Ajout d'une valeur d'entrepôt supplémentaire.
  - 1.2.5		: La nourriture n'est plus prise en compte dans le calcul des ressources pillables spatiales.
  - 1.2.4		: Correction des bugs induits par la factorisation. Correction des couleurs.
@@ -37,8 +38,10 @@ var myPoints = null;
 \*********************/
 
 /***** BUGS *****\
- - Le calcul des couleurs ne marche pas si on est premier (division par 0).
- - Après un second clic sur "analyser", le cadre ne redescend plus (le contexte n'est plus bon dans l'évènement).
+ -02 Le calcul des couleurs ne marche pas si on est premier (division par 0).
+ -------
+ COORIGES:
+ -01 Après un second clic sur "analyser", le cadre ne redescend plus (le contexte n'est plus bon dans l'évènement).
 \****************/
 
 /***** TODO *****\
@@ -56,7 +59,7 @@ var myPoints = null;
  	- La textarea des notes est mal dimensionnée.
 \****************/
 
-
+var DEBUG_el = null;
 var getTextNodesIn = function(el) {
     return $(el).find(":not(iframe)").addBack().contents().filter(function() {
         return this.nodeType == 3;
@@ -246,7 +249,7 @@ var Espionnage = {
 		return parseInt(txt.substr(txt.indexOf(":")+1, txt.length).replace(/\./g, ''));
 	},
 	_initPanel : function() {
-		var self = this;
+		var self = Espionnage;
 
 		// Initialisation des améliorations du panneau de droite.
 	    var rapportRsrc = $("fieldset.espionMoyenrapport:nth-child(2) > div:nth-child(3)");
