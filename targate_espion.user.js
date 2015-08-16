@@ -38,6 +38,7 @@ var myPoints = null;
 
 /***** BUGS *****\
  - Le calcul des couleurs ne marche pas si on est premier (division par 0).
+ - Après un second clic sur "analyser", le cadre ne redescend plus (le contexte n'est plus bon dans l'évènement).
 \****************/
 
 /***** TODO *****\
@@ -65,7 +66,7 @@ var getTextNodesIn = function(el) {
 //TODO: Vérifier la valeur pour un entrepôt niveau 3 (ce ne doit pas etre 540k je pense)
 var maxRes = [100000, 170000, 380000, 540000, 1290000, 2340000, 4860000, 8430000, 14450000, 24250000, 40420000, 66670000, 109020000, 177200000, 286190000, 459860000, 0, 0, 0, 0, 0, 0, 0, 0];
 //TODO: Récupérer les valeurs manquantes
-var maxTrit = [100000, 0, 0, 0, 1430000, 2340000, 4510000, 7660000, 12980000, 21520000, 35380000, 0, 92850000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+var maxTrit = [100000, 0, 0, 0, 1430000, 2340000, 4510000, 7660000, 12980000, 21520000, 35380000, 57500000, 92850000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 var Network = {
 	GetAllPlayers : function(callback, error) {
