@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.2.5.2
+// @version     1.2.6
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @grant       GM_log
@@ -16,6 +16,8 @@ var myPseudo = null;
 var myPoints = null;
 
 /***** CHANGELOG *****\
+ - 1.2.6 		: Test d'implémentation de la fonctionnalité 01. 
+ - 1.2.5.3 		: Ajout d'une valeur d'entrepôt supplémentaire.
  - 1.2.5.2 		: Ajout d'une valeur d'entrepôt supplémentaire. Correction du bug 01.
  - 1.2.5.1 		: Ajout d'une valeur d'entrepôt supplémentaire.
  - 1.2.5		: La nourriture n'est plus prise en compte dans le calcul des ressources pillables spatiales.
@@ -50,6 +52,7 @@ var myPoints = null;
  	- Adapter les couleurs pour refléter les joueurs en dessous de 50% de son propre score et au dessus de 50%.
  	- Option ASC/DESC pour le classement des joueurs.
  	- Régler les ressources des entrepôts.
+ 	- 01 Repositionner automatiquement l'écran au bon endroit après un rechargement de page quand on ré-espionne.
  + SIMULATION
  	- Afficher le résultat de la simulation de combat dans la page, si demandé par l'utilisateur (spatial ou terrestre).
  + TECHNIQUE :
@@ -66,8 +69,13 @@ var getTextNodesIn = function(el) {
     });
 };
 
+
+var addMinutes = function(date, minutes) {
+	return new Date(date.getTime() + minutes*60000);
+};
+
 //TODO: Vérifier la valeur pour un entrepôt niveau 3 (ce ne doit pas etre 540k je pense)
-var maxRes = [100000, 170000, 380000, 540000, 1290000, 2340000, 4860000, 8430000, 14450000, 24250000, 40420000, 66670000, 109020000, 177200000, 286190000, 459860000, 0, 0, 0, 0, 0, 0, 0, 0];
+var maxRes = [100000, 170000, 380000, 540000, 1290000, 2340000, 4860000, 8430000, 14450000, 24250000, 40420000, 66670000, 109020000, 177200000, 286190000, 459860000, 735730000, 0, 0, 0, 0, 0, 0, 0];
 //TODO: Récupérer les valeurs manquantes
 var maxTrit = [100000, 0, 0, 0, 1430000, 2340000, 4510000, 7660000, 12980000, 21520000, 35380000, 57500000, 92850000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
@@ -231,6 +239,39 @@ var UI = {
 			});
 			self._sortPlayers(players);
 		});
+	},
+	ScrollScreenIfNeeded: function() {
+		var repos = GM_SuperValue.get("tttespionrepos");
+
+		if(repos!==undefined) {
+			GM_SuperValue.set("tttespionrepos", undefined);
+			var today = new Date();	
+			// Si ca fait plus d'1 minute qu'on a pas rafraichi la page,
+			// on considère que ce n'est pas un rafraichissement automatique.
+			// Sinon, on repositionne la fenêtre au bon endroit.
+			if(addMinutes(repos.leavePageDate, 1) >= today) {
+				var scroll = repos.scrollY;
+				setTimeout(function() {
+					window.scrollTo(0, scroll);
+				}, 1000);
+				//TODO: il faudrait maintenant déplacer la fenêtre d'espionnage précedemment ouverte
+				// au bon endroit en appelant la bonne fonction dans UI.
+			}
+		}
+	},
+	SaveScrollStateHandler: function() {
+		// Lien "Espionner à nouveau". Si le lien est présent après un clic sur "Bouton bleu", on ajoute
+		// un event handler sur le clic pour sauvegarder la date/heure de sortie de page ainsi que le scroll courant.
+		// On pourra ainsi remettre le scroll au bon endroit après le rechargement.
+		var $espionnerEncore = $("#espaceMessage > div > fieldset.espionListeBouton > div > a");
+		if ($espionnerEncore.length > 0) {
+			$espionnerEncore.click(function() {
+				GM_SuperValue.set("tttespionrepos", {
+					leavePageDate: new Date(),
+					scrollY: window.scrollY;
+				});
+			});
+		}
 	}
 };
 
@@ -252,8 +293,6 @@ var Espionnage = {
 		var self = Espionnage;
 
 		// Initialisation des améliorations du panneau de droite.
-	    var rapportRsrc = $("fieldset.espionMoyenrapport:nth-child(2) > div:nth-child(3)");
-	    var rapportBats = $("fieldset.espionGrandrapport").first();
 	    $(".espionnageColonne1").prepend("<div class='tttespace' style='float:left;width=200px;' />");
 	    $(".tttespace").width(100);
 	    $(".tttespace").height(window.scrollY - 50);
@@ -262,10 +301,18 @@ var Espionnage = {
 	        $(".tttespace").height(window.scrollY - 50);
 	    });
 
-		$(".boutonBleu").click(function() {
-			setTimeout(self._initPanel, 700);
-		});
+	    var rapportRsrc = $("fieldset.espionMoyenrapport:nth-child(2) > div:nth-child(3)");
+	    var rapportBats = $("fieldset.espionGrandrapport").first();
+		self._calculResources(rapportRsrc, rapportBats);
 
+		$(".boutonBleu").click(function() {
+			setTimeout(function() {
+				self._initPanel();
+				UI.SaveScrollStateHandler();
+			}, 700);//self._initPanel, 700);
+		});
+	},
+	_calculResources: function(rapportRsrc, rapportBats) {
 	    if (rapportRsrc.length>0 && rapportBats.length>0) {
 	        var txtRsrc = getTextNodesIn(rapportRsrc);
 	        var txtBats = getTextNodesIn(rapportBats);
@@ -416,4 +463,5 @@ var Notes = {
 
 UI.DrawPoints();
 Espionnage.Init();
+UI.ScrollScreenIfNeeded();
 Notes.Init();
