@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.2.6
+// @version     1.2.6.2
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @grant       GM_log
@@ -16,7 +16,8 @@ var myPseudo = null;
 var myPoints = null;
 
 /***** CHANGELOG *****\
- - 1.2.6 		: Test d'implémentation de la fonctionnalité 01. 
+ - 1.2.6.2 		: Débogages divers et variés, particulièrement lorsqu'on charge un cadre d'un joueur déjà espionné.
+ - 1.2.6 		: Repositionner automatiquement l'écran au bon endroit après un rechargement de page quand on ré-espionne.
  - 1.2.5.3 		: Ajout d'une valeur d'entrepôt supplémentaire.
  - 1.2.5.2 		: Ajout d'une valeur d'entrepôt supplémentaire. Correction du bug 01.
  - 1.2.5.1 		: Ajout d'une valeur d'entrepôt supplémentaire.
@@ -50,9 +51,8 @@ var myPoints = null;
  + ESPIONNAGE :
  	- Trier les ([TAR])
  	- Adapter les couleurs pour refléter les joueurs en dessous de 50% de son propre score et au dessus de 50%.
- 	- Option ASC/DESC pour le classement des joueurs.
  	- Régler les ressources des entrepôts.
- 	- 01 Repositionner automatiquement l'écran au bon endroit après un rechargement de page quand on ré-espionne.
+ 	- Recliquer sur la planète dernièrement espionnée après rechargement de la page lors du clic sur "Espionner à nouveau".
  + SIMULATION
  	- Afficher le résultat de la simulation de combat dans la page, si demandé par l'utilisateur (spatial ou terrestre).
  + TECHNIQUE :
@@ -249,7 +249,7 @@ var UI = {
 			// Si ca fait plus d'1 minute qu'on a pas rafraichi la page,
 			// on considère que ce n'est pas un rafraichissement automatique.
 			// Sinon, on repositionne la fenêtre au bon endroit.
-			if(addMinutes(repos.leavePageDate, 1) >= today) {
+			if(addMinutes(new Date(repos.leavePageDate), 1) >= today) {
 				var scroll = repos.scrollY;
 				setTimeout(function() {
 					window.scrollTo(0, scroll);
@@ -268,7 +268,7 @@ var UI = {
 			$espionnerEncore.click(function() {
 				GM_SuperValue.set("tttespionrepos", {
 					leavePageDate: new Date(),
-					scrollY: window.scrollY;
+					scrollY: window.scrollY
 				});
 			});
 		}
@@ -292,6 +292,8 @@ var Espionnage = {
 	_initPanel : function() {
 		var self = Espionnage;
 
+	    var rapportRsrc = $("fieldset.espionMoyenrapport:nth-child(2) > div.ordre");
+	    var rapportBats = $("fieldset.espionGrandrapport").first();
 		// Initialisation des améliorations du panneau de droite.
 	    $(".espionnageColonne1").prepend("<div class='tttespace' style='float:left;width=200px;' />");
 	    $(".tttespace").width(100);
@@ -301,8 +303,6 @@ var Espionnage = {
 	        $(".tttespace").height(window.scrollY - 50);
 	    });
 
-	    var rapportRsrc = $("fieldset.espionMoyenrapport:nth-child(2) > div:nth-child(3)");
-	    var rapportBats = $("fieldset.espionGrandrapport").first();
 		self._calculResources(rapportRsrc, rapportBats);
 
 		$(".boutonBleu").click(function() {
@@ -317,11 +317,13 @@ var Espionnage = {
 	        var txtRsrc = getTextNodesIn(rapportRsrc);
 	        var txtBats = getTextNodesIn(rapportBats);
 
-	        if (txtRsrc.length === 4 && txtBats.length === 22) {
-	        	var nivOr = this._valeurCle(txtBats[14]);
-	        	var nivTi = this._valeurCle(txtBats[15]);
-	        	var nivTr = this._valeurCle(txtBats[16]);
-	        	var nivNo = this._valeurCle(txtBats[17]);
+	        // Selon si on a déjà espionné le joueur, il faut enlever 10 aux clés de batiments.
+	        if (txtRsrc.length === 4 && (txtBats.length === 22 || txtBats.length === 16)) {
+	        	var dejaEsp = (txtBats.length === 16);
+	        	var nivOr = this._valeurCle(txtBats[4 + (!dejaEsp) * 10]);
+	        	var nivTi = this._valeurCle(txtBats[5 + (!dejaEsp) * 10]);
+	        	var nivTr = this._valeurCle(txtBats[6 + (!dejaEsp) * 10]);
+	        	var nivNo = this._valeurCle(txtBats[7 + (!dejaEsp) * 10]);
 	            var or = this._valeurCle(txtRsrc[0]);
 	            var titane = this._valeurCle(txtRsrc[1]);
 	            var tritium = this._valeurCle(txtRsrc[2]);
