@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.2.6.2
+// @version     1.2.7
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @grant       GM_log
@@ -16,6 +16,7 @@ var myPseudo = null;
 var myPoints = null;
 
 /***** CHANGELOG *****\
+ - 1.2.7 		: Reclic sur le joueur dernièrement espionné après rechargement de la page (échec d'espionnage). Optimisations mineures.
  - 1.2.6.2 		: Débogages divers et variés, particulièrement lorsqu'on charge un cadre d'un joueur déjà espionné.
  - 1.2.6 		: Repositionner automatiquement l'écran au bon endroit après un rechargement de page quand on ré-espionne.
  - 1.2.5.3 		: Ajout d'une valeur d'entrepôt supplémentaire.
@@ -49,6 +50,8 @@ var myPoints = null;
 
 /***** TODO *****\
  + ESPIONNAGE :
+ 	- Option pour cacher les joueurs qu'on ne peut pas attaquer.
+ 	- Trier les planètes par distance.
  	- Trier les ([TAR])
  	- Adapter les couleurs pour refléter les joueurs en dessous de 50% de son propre score et au dessus de 50%.
  	- Régler les ressources des entrepôts.
@@ -251,9 +254,12 @@ var UI = {
 			// Sinon, on repositionne la fenêtre au bon endroit.
 			if(addMinutes(new Date(repos.leavePageDate), 1) >= today) {
 				var scroll = repos.scrollY;
+				var index = repos.lastPlayerIndex;
 				setTimeout(function() {
 					window.scrollTo(0, scroll);
-				}, 1000);
+					// Clic sur le dernier player espionné pour actualiser le panneau d'espionnage.
+					if(index!==null) $(".coloraqua").eq(index).click();
+				}, 750);
 				//TODO: il faudrait maintenant déplacer la fenêtre d'espionnage précedemment ouverte
 				// au bon endroit en appelant la bonne fonction dans UI.
 			}
@@ -268,7 +274,8 @@ var UI = {
 			$espionnerEncore.click(function() {
 				GM_SuperValue.set("tttespionrepos", {
 					leavePageDate: new Date(),
-					scrollY: window.scrollY
+					scrollY: window.scrollY,
+					lastPlayerIndex: Espionnage.lastPlayerIndex
 				});
 			});
 		}
@@ -317,13 +324,13 @@ var Espionnage = {
 	        var txtRsrc = getTextNodesIn(rapportRsrc);
 	        var txtBats = getTextNodesIn(rapportBats);
 
-	        // Selon si on a déjà espionné le joueur, il faut enlever 10 aux clés de batiments.
+	        // Selon si on a déjà espionné le joueur, il faut enlever 6 aux clés de batiments.
 	        if (txtRsrc.length === 4 && (txtBats.length === 22 || txtBats.length === 16)) {
 	        	var dejaEsp = (txtBats.length === 16);
-	        	var nivOr = this._valeurCle(txtBats[4 + (!dejaEsp) * 10]);
-	        	var nivTi = this._valeurCle(txtBats[5 + (!dejaEsp) * 10]);
-	        	var nivTr = this._valeurCle(txtBats[6 + (!dejaEsp) * 10]);
-	        	var nivNo = this._valeurCle(txtBats[7 + (!dejaEsp) * 10]);
+	        	var nivOr = this._valeurCle(txtBats[8 + (!dejaEsp) * 6]);
+	        	var nivTi = this._valeurCle(txtBats[9 + (!dejaEsp) * 6]);
+	        	var nivTr = this._valeurCle(txtBats[10 + (!dejaEsp) * 6]);
+	        	var nivNo = this._valeurCle(txtBats[11 + (!dejaEsp) * 6]);
 	            var or = this._valeurCle(txtRsrc[0]);
 	            var titane = this._valeurCle(txtRsrc[1]);
 	            var tritium = this._valeurCle(txtRsrc[2]);
@@ -355,13 +362,18 @@ var Espionnage = {
 	},
 	Init : function(){
 		var self=this;
+
+		var playersNames = $(".coloraqua");
+
 		// Ajout de la gestion du clic.
-		$(".coloraqua").click(function() {
+		playersNames.click(function() {
 		    setTimeout(function() {
 		    	self._initPanel();
+		    	self.lastPlayerIndex = playersNames.index(this);
 		    }, 700);
 		});
-	}
+	},
+	lastPlayerIndex: null
 };
 
 // Module de gestion des notes sur les joueurs.
