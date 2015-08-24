@@ -4,7 +4,7 @@
 // @include 	http://targate.fr/index.php?choix=classement*
 // @include     http://www.targate.fr/index.php?choix=classement*
 // @include     https://targate.fr/index.php?choix=classement*
-// @version     1.1.1.2
+// @version     1.1.1.3
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @require		https://raw.githubusercontent.com/Thilitium/Tartweak/master/jquery.canvasjs.min.js
@@ -164,9 +164,9 @@ var Init = function() {
 	switch(menu) {
 		case "general":
 			keyScore="score:";
-		case "unitee":
+		/*case "unitee":
 		case "batiment":
-		case "technologie":
+		case "technologie":*/
 			if(keyScore!=="score:") keyScore = "score" + menu + ":";
 			divMaster.append(divContain);
 			$body.prepend(divMaster);
