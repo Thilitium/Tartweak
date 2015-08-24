@@ -349,46 +349,49 @@ var Espionnage = {
 	            var nbVAB = Math.ceil(pillTot / 3000);
 	            var nbVABCom = Math.ceil(pillTot / 3300);
 	            var app = 
-	            "<table style='border:2px solid white;color:black;background-color:white;text-align:right;'>"  +
+	            "<table style='border:2px solid black;border-collapse:collapse;color:black;background-color:white;text-align:right;'>" +
 	            	"<tbody>"  +
 	            		"<tr>" +
-	            			"<td style='background-color:yellow;'>" + pillOr + "</td>" +
-	            			"<td style='color:black;background-color:lightgrey'>" + pillTit + "</td>" +
-	            			"<td style='background-color:black;'>" + pillTrit + "</td>" +
-	            			"<td style='background-color:orange;'>" + pillNour + "</td>" +
+	            			"<th style='background-color:yellow;'>" + Math.floor(or / 1000000) + "m</th>" +
+	            			"<th style='background-color:lightgrey'>" + Math.floor(titane / 1000000) + "m</th>" +
+	            			"<th style='background-color:black;color:white;'>" + Math.floor(tritium / 1000000) + "m</th>" +
+	            			"<th style='background-color:orange;'>" + Math.floor(nourriture / 1000000) + "m</th>" +
 	            		"</tr>" +
-	            		"<tr style='text-align:center;'>" +
-	            			"<th style='colspan:2;'>Spatial :</th>" +
-	            			"<th style='colspan:2;'>Terrestre :</th>" +
+	            		"<tr style='border-bottom: 1px solid white;'>" +
+	            			"<th style='background-color:yellow;'>" + Math.floor(or / maxRes[nivOr] * 100) + "%</th>" +
+	            			"<th style='background-color:lightgrey'>" + Math.floor(titane / maxRes[nivTi] * 100) + "%</th>" +
+	            			"<th style='background-color:black;color:white;'>" + Math.floor(tritium / maxTrit[nivTr] * 100) + "%</th>" +
+	            			"<th style='background-color:orange;'>" + Math.floor(nourriture / maxRes[nivNo] * 100) + "%</th>" +
 	            		"</tr>" +
-	            		"<tr>" +
-	            			"<td style='colspan:2;'>" + Math.Floor(pillTotSpatial / 1000000) + "m</td>" +
-	            			"<td style='colspan:2;'>" + Math.Floor(pillTot / 1000000) + "m</td>" +
+	            		"<tr style='border-bottom: 2px solid black;'>" +
+	            			"<td style='background-color:yellow;'>" + Math.floor(pillOr / 1000000) + "m</td>" +
+	            			"<td style='background-color:lightgrey'>" + Math.floor(pillTit / 1000000) + "m</td>" +
+	            			"<td style='background-color:black;color:white;'>" + Math.floor(pillTrit / 1000000) + "m</td>" +
+	            			"<td style='background-color:orange;'>" + Math.floor(pillNour / 1000000) + "m</td>" +
 	            		"</tr>" +
-	            		"<tr>" +
-	            			"<th style='text-align:left;'>Ravitailleurs :</th>" +
-	            			"<td>" + nbRavi + "</td>" +
-	            			"<th style='text-align:left;'>VAB :</th>" +
+	            		"<tr style='text-align:center;border-bottom: 1px solid black;'>" +
+	            			"<th colspan='2' style='border-right:2px solid black;'>Spatial :</th>" +
+	            			"<th colspan='2'>Terre :</th>" +
+	            		"</tr>" +
+	            		"<tr style='text-align:center;border-bottom: 1px dotted black;'>" +
+	            			"<td colspan='2' style='border-right:2px solid black;'>" + Math.floor(pillTotSpatial / 1000000) + "m</td>" +
+	            			"<td colspan='2'>" + Math.floor(pillTot / 1000000) + "m</td>" +
+	            		"</tr>" +
+	            		"<tr style='border-bottom: 1px dotted black;'>" +
+	            			"<th style='text-align:left;border-right:1px dotted lightgrey;'>Ravit.</th>" +
+	            			"<td style='border-right:2px solid black;'>" + nbRavi + "</td>" +
+	            			"<th style='text-align:left;border-right:1px dotted lightgrey;'>VAB</th>" +
 	            			"<td>" + nbVAB + "</td>" +
 	            		"</tr>" +
 	            		"<tr>" +
-	            			"<th style='text-align:left;'>Cargos :</th>" +
-	            			"<td>" + nbCarg + "</td>" +
-	            			"<th style='text-align:left;'> VAB+10% </th>" +
+	            			"<th style='text-align:left;border-right:1px dotted lightgrey;'>Cargos</th>" +
+	            			"<td style='border-right:2px solid black;'>" + nbCarg + "</td>" +
+	            			"<th style='text-align:left;border-right:1px dotted lightgrey;'>+10%</th>" +
 	            			"<td>" + nbVABCom + "</td>" +
 	            		"</tr>" +
 	            	"</tbody>" +
 	            "</table>";
-	            /*var app = 	
-	            	"<br/>" + 
-	            	"<div style='color:red;'>" +
-	                	"Terrestre : "  + pillTot + "<br/>" + 
-	                	"Spatial : " + pillTotSpatial + "<br/>" +
-	                	"VAB" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + ": " + nbVAB + "<br/>" +
-	                	"Ravitailleurs" + "&nbsp;" + ": " + nbRavi + "<br/>" +
-	                	"Cargos" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + ": " + nbCarg + "<br/>" + 
-	                "</div>";*/
-	            rapportRsrc.append(app);
+	            rapportRsrc.html(app);
 	        }
 	    }
 	},
