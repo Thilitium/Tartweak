@@ -4,7 +4,7 @@
 // @include     http://targate.fr/index.php?choix=centre_espionnage*
 // @include     http://www.targate.fr/index.php?choix=centre_espionnage*
 // @include     https://targate.fr/index.php?choix=centre_espionnage*
-// @version     1.2.7
+// @version     1.2.8
 // @require 	http://code.jquery.com/jquery-2.1.4.min.js
 // @require 	http://git.degree.by/degree/userscripts/raw/bb45d5acd1e5ad68d254a2dbbea796835533c344/src/gm-super-value.user.js
 // @grant       GM_log
@@ -16,6 +16,7 @@ var myPseudo = null;
 var myPoints = null;
 
 /***** CHANGELOG *****\
+ - 1.2.8		: Nouveau panneau de consultation des ressources pillables.
  - 1.2.7 		: Reclic sur le joueur dernièrement espionné après rechargement de la page (échec d'espionnage). Optimisations mineures.
  - 1.2.6.2 		: Débogages divers et variés, particulièrement lorsqu'on charge un cadre d'un joueur déjà espionné.
  - 1.2.6 		: Repositionner automatiquement l'écran au bon endroit après un rechargement de page quand on ré-espionne.
@@ -302,7 +303,7 @@ var Espionnage = {
 	    var rapportRsrc = $("fieldset.espionMoyenrapport:nth-child(2) > div.ordre");
 	    var rapportBats = $("fieldset.espionGrandrapport").first();
 		// Initialisation des améliorations du panneau de droite.
-	    $(".espionnageColonne1").prepend("<div class='tttespace' style='float:left;width=200px;' />");
+	    $(".espionnageColonne1").prepend("<div class='tttespace' style='float:left;width=225px;' />");
 	    $(".tttespace").width(100);
 	    $(".tttespace").height(window.scrollY - 50);
 	    $(window).scroll(function() {
@@ -345,17 +346,48 @@ var Espionnage = {
 
 	            var nbCarg = Math.ceil(pillTotSpatial / 40000);
 	            var nbRavi = Math.ceil(pillTotSpatial / 20000);
-	            var nbVAB = Math.ceil(pillTot / (3000 + 300)); // +300 pour simuler les 10% qu'ajoute le commandeur.
-
-	            var app = 	
+	            var nbVAB = Math.ceil(pillTot / 3000);
+	            var nbVABCom = Math.ceil(pillTot / 3300);
+	            var app = 
+	            "<table style='border:2px solid white;color:black;background-color:white;text-align:right;'>"  +
+	            	"<tbody>"  +
+	            		"<tr>" +
+	            			"<td style='background-color:yellow;'>" + pillOr + "</td>" +
+	            			"<td style='color:black;background-color:lightgrey'>" + pillTit + "</td>" +
+	            			"<td style='background-color:black;'>" + pillTrit + "</td>" +
+	            			"<td style='background-color:orange;'>" + pillNour + "</td>" +
+	            		"</tr>" +
+	            		"<tr style='text-align:center;'>" +
+	            			"<th style='colspan:2;'>Spatial :</th>" +
+	            			"<th style='colspan:2;'>Terrestre :</th>" +
+	            		"</tr>" +
+	            		"<tr>" +
+	            			"<td style='colspan:2;'>" + Math.Floor(pillTotSpatial / 1000000) + "m</td>" +
+	            			"<td style='colspan:2;'>" + Math.Floor(pillTot / 1000000) + "m</td>" +
+	            		"</tr>" +
+	            		"<tr>" +
+	            			"<th style='text-align:left;'>Ravitailleurs :</th>" +
+	            			"<td>" + nbRavi + "</td>" +
+	            			"<th style='text-align:left;'>VAB :</th>" +
+	            			"<td>" + nbVAB + "</td>" +
+	            		"</tr>" +
+	            		"<tr>" +
+	            			"<th style='text-align:left;'>Cargos :</th>" +
+	            			"<td>" + nbCarg + "</td>" +
+	            			"<th style='text-align:left;'> VAB+10% </th>" +
+	            			"<td>" + nbVABCom + "</td>" +
+	            		"</tr>" +
+	            	"</tbody>" +
+	            "</table>";
+	            /*var app = 	
 	            	"<br/>" + 
 	            	"<div style='color:red;'>" +
-	                	"Terestre : "  + pillTot + "<br/>" + 
+	                	"Terrestre : "  + pillTot + "<br/>" + 
 	                	"Spatial : " + pillTotSpatial + "<br/>" +
 	                	"VAB" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + ": " + nbVAB + "<br/>" +
 	                	"Ravitailleurs" + "&nbsp;" + ": " + nbRavi + "<br/>" +
 	                	"Cargos" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + ": " + nbCarg + "<br/>" + 
-	                "</div>";
+	                "</div>";*/
 	            rapportRsrc.append(app);
 	        }
 	    }
